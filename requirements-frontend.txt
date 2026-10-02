@@ -1,0 +1,3 @@
+# Gaurav's Streamlit dashboard (install on top of requirements.txt)
+streamlit>=1.50
+plotly>=5.20

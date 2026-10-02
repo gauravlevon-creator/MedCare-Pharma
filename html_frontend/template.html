@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MedCare Pharma · Inventory &amp; Demand Intelligence</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+<style>
+:root{
+  --ink:#0f1c2b; --ink2:#46505c; --muted:#6c7682; --line:#e2e6ea; --paper:#f5f7fa; --card:#ffffff;
+  --side:#0f2a4a; --side-ink:#e8eef6; --side-muted:#9fb3c8; --hover:#eef3f8;
+  --brand:#1c5cab; --brand2:#104281;
+  --crit:#d03b3b; --warn:#e8743f; --attn:#e0a100; --good:#0c9a0c; --info:#2a78d6; --neutral:#8a8f96;
+  --crit-bg:#fdecec; --warn-bg:#fdf0e8; --attn-bg:#fff7dc; --good-bg:#e9f6e9; --info-bg:#e8f1fc; --neutral-bg:#f0efec;
+  --crit-fg:#9f1f1f; --warn-fg:#8a3d12; --attn-fg:#6b4e00; --good-fg:#0b5e0b; --info-fg:#184f95; --neutral-fg:#52514e;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#4a3aa7; --s1l:#9ec5f4; --grid:#e8eaed;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#e9eef4; --ink2:#c3cad3; --muted:#98a3ae; --line:#2b3a4a; --paper:#0d1620; --card:#152230;
+    --side:#0a1a2c; --side-ink:#e8eef6; --side-muted:#8ea3b8; --hover:#1c2d3f; --brand:#3987e5; --brand2:#2a78d6;
+    --crit-bg:#3a1a1a; --warn-bg:#3a2415; --attn-bg:#3a300f; --good-bg:#12301a; --info-bg:#132a45; --neutral-bg:#2a2d31;
+    --crit-fg:#ff9a9a; --warn-fg:#ffbb94; --attn-fg:#f5d77a; --good-fg:#8fe08f; --info-fg:#9ec5f4; --neutral-fg:#c3c2b7;
+    --s1:#3987e5; --s2:#d95926; --s3:#9085e9; --s1l:#2f5c8f; --grid:#223242;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#e9eef4; --ink2:#c3cad3; --muted:#98a3ae; --line:#2b3a4a; --paper:#0d1620; --card:#152230;
+  --side:#0a1a2c; --side-ink:#e8eef6; --side-muted:#8ea3b8; --hover:#1c2d3f; --brand:#3987e5; --brand2:#2a78d6;
+  --crit-bg:#3a1a1a; --warn-bg:#3a2415; --attn-bg:#3a300f; --good-bg:#12301a; --info-bg:#132a45; --neutral-bg:#2a2d31;
+  --crit-fg:#ff9a9a; --warn-fg:#ffbb94; --attn-fg:#f5d77a; --good-fg:#8fe08f; --info-fg:#9ec5f4; --neutral-fg:#c3c2b7;
+  --s1:#3987e5; --s2:#d95926; --s3:#9085e9; --s1l:#2f5c8f; --grid:#223242;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45}
+.app{display:flex;min-height:100vh}
+aside{width:260px;flex:none;background:var(--side);color:var(--side-ink);padding:1.1rem .9rem;position:sticky;top:0;height:100vh;overflow:auto}
+aside .brand{font-weight:800;letter-spacing:.1em}
+aside .tag{font-size:.8rem;color:var(--side-muted);margin-bottom:1rem}
+nav a{display:flex;gap:.6rem;align-items:center;padding:.55rem .7rem;border-radius:8px;color:var(--side-ink);text-decoration:none;margin-bottom:2px;font-size:.95rem}
+nav a:hover{background:rgba(255,255,255,.08)} nav a.on{background:rgba(255,255,255,.16);font-weight:650}
+.side-h{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--side-muted);margin:1.2rem 0 .4rem}
+.side-box{font-size:.8rem;color:var(--side-ink);line-height:1.55}
+.side-box .m{color:var(--side-muted)}
+aside button{width:100%;margin-top:.5rem;background:rgba(255,255,255,.1);color:var(--side-ink);border:1px solid rgba(255,255,255,.2)}
+main{flex:1;min-width:0;padding:1.1rem 1.6rem 3rem;max-width:1440px}
+.header{background:linear-gradient(90deg,#0f2a4a,#1c5cab);color:#fff;border-radius:12px;padding:14px 20px;margin-bottom:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.header .b{font-weight:800;letter-spacing:.12em;font-size:1.05rem}.header .s{opacity:.85;font-size:.88rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:3px 10px;font-size:.78rem;white-space:nowrap}
+h1{font-size:1.45rem;margin:.2rem 0 .1rem}
+.sub{color:var(--ink2);font-size:.9rem;margin:0 0 1rem}
+h2{font-size:1.02rem;margin:1.4rem 0 .55rem;padding-bottom:.3rem;border-bottom:1px solid var(--line)}
+.grid{display:grid;gap:.75rem}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g5{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.g6{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem}.two>*,.grid>*{min-width:0}.two.w{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+@media(max-width:1050px){.two,.two.w{grid-template-columns:1fr}}
+@media(max-width:820px){.app{flex-direction:column}aside{width:auto;height:auto;position:static}main{padding:1rem}}
+.kpi{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:10px;padding:.75rem .95rem}
+.kpi .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);font-weight:650;min-height:2.2em}
+.kpi .v{font-size:clamp(1.2rem,1.9vw,1.65rem);overflow-wrap:anywhere;font-weight:780;line-height:1.15;margin-top:.15rem}
+.kpi .s{font-size:.74rem;color:var(--muted);margin-top:.15rem}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:10px;padding:.8rem .95rem;margin-bottom:.65rem}
+.card .top{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
+.card .t{font-weight:750}
+.card .q{font-size:1.2rem;font-weight:800;margin:.35rem 0 .1rem}
+.card .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:.35rem .9rem;margin-top:.45rem}
+.card .fields div{font-size:.78rem;color:var(--ink2)}.card .fields b{display:block;color:var(--ink);font-size:.92rem}
+.card .why{font-size:.83rem;color:var(--ink2);margin-top:.45rem;line-height:1.4}
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:.1rem .75rem}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem}
+.badge{display:inline-block;border-radius:6px;padding:2px 8px;font-size:.74rem;font-weight:700;white-space:nowrap}
+.flow{display:flex;flex-wrap:wrap;margin:.4rem 0}
+.step{flex:1 1 135px;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:10px;padding:.6rem .75rem;margin:4px 16px 4px 0;position:relative}
+.step:not(:last-child)::after{content:"➜";position:absolute;right:-15px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem}
+.step .k{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);font-weight:650}
+.step .v{font-size:1.1rem;font-weight:780;margin-top:2px}
+.step .d{font-size:.72rem;color:var(--muted);margin-top:2px;line-height:1.3}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.7rem;margin-bottom:.8rem;align-items:end}
+label.f{display:block;font-size:.76rem;color:var(--ink2);margin-bottom:.2rem;font-weight:600}
+select,input[type=text]{width:100%;padding:.45rem .55rem;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+label.chk{display:flex;gap:.45rem;align-items:center;font-size:.86rem;padding:.45rem 0}
+button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.4rem .8rem;cursor:pointer}
+button:hover{filter:brightness(.97)} button.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--card);max-height:460px}
+table{border-collapse:collapse;width:100%;font-size:.84rem}
+th{position:sticky;top:0;background:var(--card);text-align:left;padding:.5rem .6rem;border-bottom:2px solid var(--line);white-space:nowrap;color:var(--ink2);font-weight:650;z-index:1}
+td{padding:.4rem .6rem;border-bottom:1px solid var(--line);white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums} td.wrap{white-space:normal;min-width:320px}
+tr.click{cursor:pointer} tr.click:hover td,tr.sel td{background:var(--hover)}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.3rem;margin-bottom:.4rem}
+.small{font-size:.8rem;color:var(--muted)}
+.note{border-radius:10px;padding:.6rem .85rem;font-size:.86rem;margin-bottom:.8rem;border:1px solid var(--line);background:var(--card)}
+.note.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:transparent}.note.crit{background:var(--crit-bg);color:var(--crit-fg);border-color:transparent}
+.note.info{background:var(--info-bg);color:var(--info-fg);border-color:transparent}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:1rem;color:var(--muted);background:var(--card)}
+.tabs{display:flex;gap:.3rem;border-bottom:1px solid var(--line);margin:.4rem 0 .8rem;flex-wrap:wrap}
+.tabs button{border:0;border-bottom:3px solid transparent;border-radius:0;background:none;padding:.45rem .8rem;color:var(--ink2)}
+.tabs button.on{border-bottom-color:var(--brand);color:var(--brand);font-weight:650}
+.quick{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem}
+.row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+details{margin:.5rem 0} summary{cursor:pointer;font-weight:600;font-size:.9rem}
+code{font-size:.82em;background:var(--hover);padding:1px 5px;border-radius:4px}
+</style>
+<!--PLOTLY-->
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">💊 MEDCARE PHARMA</div>
+    <div class="tag">Inventory &amp; Demand Intelligence</div>
+    <nav id="nav" aria-label="Pages"></nav>
+    <div class="side-h">Selected item</div>
+    <div class="side-box" id="focusbox"></div>
+    <div class="side-h">Data</div>
+    <div class="side-box" id="databox"></div>
+    <button id="theme" type="button">🌓 Light / dark</button>
+  </aside>
+  <main>
+    <div class="header"><div><div class="b">MEDCARE PHARMA</div><div class="s">Inventory &amp; Demand Intelligence · Smart Restock Alerts · Demand Sensing &amp; Replenishment</div></div>
+      <div class="chips" id="chips"></div></div>
+    <div id="banner"></div>
+    <div id="view"></div>
+  </main>
+</div>
+<script>
+const D = /*__DATA__*/null;
+</script>
+<script>
+"use strict";
+/* =================== helpers =================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const num = v => (v === null || v === undefined || v === "" || Number.isNaN(+v)) ? null : +v;
+const fmt = (v, d = 0) => num(v) === null ? "—" : (+v).toLocaleString("en-US", {minimumFractionDigits: d, maximumFractionDigits: d});
+const sfmt = v => num(v) === null ? "—" : (Number.isInteger(+v) ? fmt(v) : fmt(v, 2));
+const sum = a => a.reduce((s, x) => s + (num(x) || 0), 0);
+const uniq = a => [...new Set(a)];
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const K = (s, w) => s + "|" + w;
+const MS = 86400000;
+const addDays = (iso, n) => new Date(Date.parse(iso + "T00:00:00Z") + n * MS).toISOString().slice(0, 10);
+const store = {get(k, d) { try { const v = localStorage.getItem("medcare." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+               set(k, v) { try { localStorage.setItem("medcare." + k, JSON.stringify(v)); } catch (e) { /* ignore */ } }};
+
+const TONE = {risk: {HIGH: "crit", MEDIUM: "warn", LOW: "good"}, sev: {HIGH: "crit", MEDIUM: "warn", LOW: "attn", INFO: "info"},
+  act: {REORDER: "warn", TRANSFER: "info", NO_ACTION: "good"}, exp: {EXPIRED: "neutral", NEAR_EXPIRY: "crit", EXPIRING_SOON: "warn", NORMAL: "good"}};
+const ICON = {crit: "🔴", warn: "🟠", attn: "🟡", good: "🟢", info: "🔵", neutral: "⚪"};
+const tone = (kind, v) => (TONE[kind] || {})[v] || "neutral";
+const actLabel = a => a === "NO_ACTION" ? "NO ACTION" : String(a ?? "—");
+const badge = (t, tn, icon = true) => `<span class="badge" style="color:var(--${tn}-fg);background:var(--${tn}-bg)">${icon ? ICON[tn] + " " : ""}${esc(t)}</span>`;
+const riskBadge = (r, pre = "") => badge(pre + r, tone("risk", r));
+const actBadge = a => badge(actLabel(a), tone("act", a), false);
+const sevBadge = s => badge(s, tone("sev", s));
+const iconTxt = (kind, v) => v == null ? "—" : `${ICON[tone(kind, v)]} ${esc(kind === "act" ? actLabel(v) : v)}`;
+const ALERT_LABEL = {STOCKOUT_RISK_HIGH: "Stock-out risk · HIGH", STOCKOUT_RISK_MEDIUM: "Stock-out risk · MEDIUM", EXPIRY_RISK_HIGH: "Expiry risk · HIGH",
+  EXPIRY_RISK_MEDIUM: "Expiry risk · MEDIUM", E1_THRESHOLD: "E1 threshold", TRANSFER_RECOMMENDED: "Transfer recommended", REORDER_RECOMMENDED: "Reorder recommended"};
+const VALUE_LABEL = {shortage_units: "Shortage (units)", potential_expiry_excess_units: "Potential expiry excess (units)", units_below_threshold: "Units below threshold",
+  transfer_units: "Transfer units", reorder_units: "Reorder units"};
+const opts = (list, sel, all) => (all ? `<option value="">${esc(all)}</option>` : "") +
+  list.map(o => { const v = typeof o === "object" ? o.v : o, t = typeof o === "object" ? o.t : o; return `<option value="${esc(v)}"${String(v) === String(sel) ? " selected" : ""}>${esc(t)}</option>`; }).join("");
+const sel = (label, key, list, value, all) => `<div><label class="f">${esc(label)}</label><select data-k="${key}">${opts(list, value, all)}</select></div>`;
+const kpi = (label, value, sub = "", tn = "neutral") => `<div class="kpi" style="border-left-color:var(--${tn === "neutral" ? "line" : tn})"><div class="l">${esc(label)}</div><div class="v">${value}</div>${sub ? `<div class="s">${esc(sub)}</div>` : ""}</div>`;
+const empty = t => `<div class="empty">${esc(t)}</div>`;
+const header = (t, s) => `<h1>${t}</h1><div class="sub">${s}</div>`;
+const chart = id => `<div class="chart"><div id="${id}"></div></div>`;
+const table = (cols, rows, opt = {}) => `<div class="tw" style="${opt.h ? `max-height:${opt.h}px` : ""}"><table><thead><tr>${cols.map(c => `<th class="${c.n ? "n" : ""}">${esc(c.h)}</th>`).join("")}</tr></thead><tbody>${rows || `<tr><td colspan="${cols.length}" class="small">No rows.</td></tr>`}</tbody></table></div>`;
+const CSV = {};
+function csvOf(name, header, rows) { CSV[name] = [header, ...rows].map(r => r.map(x => { const s = String(x ?? ""); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }).join(",")).join("\n"); return `<button type="button" data-dl="${name}">⬇ Download CSV</button>`; }
+
+function plot(id, traces, layout = {}, height = 340) {
+  const el = document.getElementById(id); if (!el || !window.Plotly) return;
+  const ink = css("--ink2"), grid = css("--grid");
+  const base = {height, margin: {l: 60, r: 16, t: layout.title ? 44 : 16, b: 50}, paper_bgcolor: css("--card"), plot_bgcolor: css("--card"),
+    font: {family: css("--font"), size: 12, color: ink}, hoverlabel: {font: {size: 12}}, bargap: .25,
+    legend: {orientation: "h", y: 1.02, yanchor: "bottom", x: 0}, xaxis: {gridcolor: grid, linecolor: css("--line"), automargin: true, showgrid: false},
+    yaxis: {gridcolor: grid, zeroline: false, automargin: true}};
+  const L = {...base, ...layout, xaxis: {...base.xaxis, ...(layout.xaxis || {})}, yaxis: {...base.yaxis, ...(layout.yaxis || {})}};
+  if (layout.title) { L.title = {text: layout.title, x: .01, xanchor: "left", y: 1, yref: "container", yanchor: "top", pad: {t: 10}, font: {size: 13, color: css("--ink")}};
+    const hasLegend = layout.showlegend !== false && traces.length > 1; L.margin = {...L.margin, t: hasLegend ? 78 : 44}; }
+  Plotly.react(el, traces, L, {displayModeBar: false, responsive: true});
+}
+
+/* =================== data =================== */
+const DEC = D.decisions || [], TRF = D.transfers || [], ALR = D.alerts || [], BAT = D.batches || [], BSUM = D.batchSummary || [];
+const DMAP = Object.fromEntries(DEC.map(d => [K(d.sku_id, d.warehouse_id), d]));
+const SKUS = uniq(DEC.map(d => d.sku_id)).sort(), WHS = uniq(DEC.map(d => d.warehouse_id)).sort();
+const whsOf = s => DEC.filter(d => d.sku_id === s).map(d => d.warehouse_id).sort();
+const fcOf = (s, w) => D.forecast[K(s, w)] || [];
+const trIn = (s, w) => TRF.filter(t => t.sku_id === s && t.destination_warehouse === w);
+const trOut = (s, w) => TRF.filter(t => t.sku_id === s && t.source_warehouse === w);
+const REAL = !D.model.pipeline || D.model.pipeline === "Chronos2Pipeline";
+const localTime = iso => { try { const d = new Date(iso); return isNaN(d) ? iso : d.toLocaleString("en-GB", {day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"}); } catch (e) { return iso; } };
+const niceDate = iso => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", {day: "2-digit", month: "short", year: "numeric", timeZone: "UTC"});
+
+/* =================== state =================== */
+const S = {page: "dashboard",
+  focus: store.get("focus", {sku: DMAP["M001|W002"] ? "M001" : SKUS[0], wh: DMAP["M001|W002"] ? "W002" : whsOf(SKUS[0])[0]}),
+  inv: {sku: "", wh: "", risk: "", act: "", e1: false}, fc: {win: "120"}, al: {type: "", sev: "", sku: "", wh: "", sel: null, tab: "alerts"},
+  ex: {sku: "", wh: "", risk: "HIGH", only: true}, rec: {act: "TRANSFER", sku: "", wh: "", limit: "20"},
+  sl: {sku: "", wh: "", gran: "month", measure: "units", tab: "period"}, sp: {year: "", month: "", sku: "", wh: ""},
+  se: {season: "flu", sku: "", wh: ""}};
+if (!DMAP[K(S.focus.sku, S.focus.wh)]) S.focus = {sku: SKUS[0], wh: whsOf(SKUS[0])[0]};
+function setFocus(s, w) { S.focus = {sku: s, wh: w}; store.set("focus", S.focus); }
+
+/* =================== shared components =================== */
+function step(k, v, d = "", tn = "neutral") { return `<div class="step" style="border-top-color:var(--${tn === "neutral" ? "line" : tn})"><div class="k">${esc(k)}</div><div class="v">${v}</div>${d ? `<div class="d">${d}</div>` : ""}</div>`; }
+function trace(d) {
+  const fc = fcOf(d.sku_id, d.warehouse_id), tin = trIn(d.sku_id, d.warehouse_id);
+  const bySrc = {}; tin.forEach(t => { (bySrc[t.source_warehouse] = bySrc[t.source_warehouse] || []).push(t.transfer_quantity); });
+  const src = Object.entries(bySrc).map(([w, q]) => `${esc(w)} (${fmt(sum(q))}${q.length > 1 ? ` in ${q.length} batches` : ""})`).join(", ");
+  const s = [
+    step("Item", `${esc(d.sku_id)} / ${esc(d.warehouse_id)}`, `Recorded ${fmt(d.current_stock)} · expired ${fmt(d.expired_stock)}`),
+    step("Usable stock", `${fmt(d.usable_stock_before)} units`, `Min threshold ${fmt(d.min_threshold)}${d.e1_threshold_alert ? " · E1 alert" : ""}`, d.e1_threshold_alert ? "attn" : "neutral"),
+    step("Chronos-2 forecast", fc.length ? `${fmt(sum(fc), 2)} / ${fc.length} d` : "Not available", `Lead-time demand (${fmt(d.lead_time_days)} d): ${fmt(d.lead_time_demand, 2)}`, "info"),
+    step("P1 stock-out risk", esc(d.risk_status), `Projected usable ${fmt(d.projected_inventory, 2)} · safety ${fmt(d.safety_stock)}`, tone("risk", d.risk_status)),
+    d.transfer_in_quantity ? step("Internal transfer in", `+${fmt(d.transfer_in_quantity)} units`, `from ${src || esc((d.source_warehouses || []).join(", "))}`, "info")
+                           : step("Internal transfer in", "None", "no inbound transfer planned"),
+    step("Usable after transfers", `${fmt(d.usable_stock_after)} units`),
+    step("Required stock", `≈ ${fmt(d.required_stock, 2)}`, "lead-time demand + safety stock"),
+    step("Remaining shortage", `≈ ${fmt(d.remaining_shortage, 2)}`, `before transfers: ${fmt(d.shortage_before, 2)}`, (d.remaining_shortage || 0) > 0 ? "crit" : "good"),
+    step("Final decision", d.final_action === "REORDER" ? `REORDER ${fmt(d.reorder_quantity)} units` : actLabel(d.final_action), esc(d.reason), tone("act", d.final_action)),
+  ];
+  return `<div class="flow">${s.join("")}</div>`;
+}
+function focusPicker(keyPrefix = "focus") {
+  const s = S.focus.sku, w = S.focus.wh;
+  return `<div class="filters" style="grid-template-columns:repeat(2,minmax(160px,260px))">${sel("SKU", keyPrefix + ".sku", SKUS, s)}${sel("Warehouse", keyPrefix + ".wh", whsOf(s), w)}</div>`;
+}
+function transferCard(t) {
+  const tn = t.transfer_type === "EXPIRY_PREVENTION" ? "crit" : "info";
+  return `<div class="card" style="border-left-color:var(--${tn})"><div class="top"><span class="t">${esc(t.sku_id)} · ${esc(t.source_warehouse)} → ${esc(t.destination_warehouse)}</span>${badge(String(t.transfer_type).replace(/_/g, " "), tn, false)}</div>
+    <div class="q">${fmt(t.transfer_quantity)} units</div><div class="fields">
+    <div>Batch<b>${esc(t.batch_id)}</b></div><div>Transfer type<b>${esc(String(t.transfer_type).replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase()))}</b></div>
+    <div>Expiry date<b>${esc(t.expiry_date)}</b></div><div>Days to expiry<b>${fmt(t.days_to_expiry)}</b></div>
+    <div>Source usable<b>${fmt(t.source_usable_before)} → ${fmt(t.source_usable_after)}</b></div><div>Destination usable<b>${fmt(t.destination_usable_before)} → ${fmt(t.destination_usable_after)}</b></div></div>
+    <div class="why">${esc(t.reason)}</div></div>`;
+}
+function reorderCard(d) {
+  return `<div class="card" style="border-left-color:var(--${tone("risk", d.risk_status)})"><div class="top"><span class="t">${esc(d.sku_id)} · ${esc(d.warehouse_id)}</span><span>${riskBadge(d.risk_status)} ${actBadge("REORDER")}</span></div>
+    <div class="q">Reorder ${fmt(d.reorder_quantity)} units</div><div class="fields">
+    <div>Lead time<b>${fmt(d.lead_time_days)} days</b></div><div>Remaining shortage<b>${fmt(d.remaining_shortage, 2)}</b></div>
+    <div>Transfers in<b>${fmt(d.transfer_in_quantity)}${(d.source_warehouses || []).length ? " from " + esc(d.source_warehouses.join(", ")) : ""}</b></div>
+    <div>Usable stock<b>${fmt(d.usable_stock_before)} → ${fmt(d.usable_stock_after)}</b></div><div>Required stock<b>${fmt(d.required_stock, 2)}</b></div>
+    <div>Expiry risk<b>${esc(d.expiry_risk)}</b></div></div><div class="why">${esc(d.reason)}</div>
+    <div style="margin-top:.5rem"><button type="button" data-open="${esc(K(d.sku_id, d.warehouse_id))}">Open journey →</button></div></div>`;
+}
+function decisionCard(d) {
+  return `<div class="card" style="border-left-color:var(--${tone("act", d.final_action)})"><div class="top"><span class="t">${esc(d.sku_id)} · ${esc(d.warehouse_id)}</span><span>${riskBadge(d.risk_status)} ${actBadge(d.final_action)}</span></div>
+    <div class="fields"><div>Usable stock<b>${fmt(d.usable_stock_before)} → ${fmt(d.usable_stock_after)}</b></div><div>Required stock<b>${fmt(d.required_stock, 2)}</b></div>
+    <div>Days of stock<b>${fmt(d.days_of_stock, 1)}</b></div><div>Transfer role<b>${esc(String(d.transfer_role || "—").replace(/_/g, " ").toLowerCase())}</b></div>
+    <div>Receives<b>${fmt(d.transfer_in_quantity)}</b></div><div>Expiry-risk units out<b>${fmt(d.expiry_transfer_out_quantity)}</b></div>
+    <div>Expiry risk<b>${esc(d.expiry_risk)}</b></div><div>E1 alert<b>${d.e1_threshold_alert ? "Yes" : "No"}</b></div></div>
+    <div class="why">${esc(d.reason)}</div><div style="margin-top:.5rem"><button type="button" data-open="${esc(K(d.sku_id, d.warehouse_id))}">Open journey →</button></div></div>`;
+}
+function alertCard(a) {
+  const tn = tone("sev", a.severity);
+  return `<div class="card" style="border-left-color:var(--${tn})"><div class="top"><span class="t">${esc(a.sku_id)} · ${esc(a.warehouse_id)} — ${esc(ALERT_LABEL[a.alert_type] || a.alert_type)}</span>
+    <span>${sevBadge(a.severity)} ${actBadge(a.recommended_action)}</span></div><div class="why">${esc(a.message)}</div>
+    <div class="small" style="margin-top:.35rem">${esc(VALUE_LABEL[a.value_label] || a.value_label)}: <b>${fmt(a.value, 2)}</b></div></div>`;
+}
+
+/* =================== sales helpers (display-only totals / averages) =================== */
+function periodOf(iso, gran) { if (gran === "week") { const t = Date.parse(iso + "T00:00:00Z"), dow = (new Date(t).getUTCDay() + 6) % 7; return new Date(t - dow * MS).toISOString().slice(0, 10); }
+  return gran === "year" ? iso.slice(0, 4) : gran === "month" ? iso.slice(0, 7) : iso; }
+function periodLabel(p, gran) {
+  if (gran === "month") return new Date(p + "-01T00:00:00Z").toLocaleDateString("en-GB", {month: "short", year: "numeric", timeZone: "UTC"});
+  if (gran === "date") return niceDate(p); if (gran === "week") return "Wk of " + niceDate(p); return p;
+}
+function periodDays(p, gran) {
+  if (gran === "year") { const y = +p; return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0 ? 366 : 365; }
+  if (gran === "month") { const [y, m] = p.split("-").map(Number); return new Date(Date.UTC(y, m, 0)).getUTCDate(); } return gran === "week" ? 7 : 1;
+}
+function salesAgg(f, gran) {
+  const out = new Map();
+  for (const [key, s] of Object.entries(D.sales || {})) {
+    const [sk, wh] = key.split("|"); if ((f.sku && sk !== f.sku) || (f.wh && wh !== f.wh)) continue;
+    for (let i = 0; i < s.u.length; i++) { if (s.u[i] == null) continue;
+      const iso = addDays(s.start, i), p = periodOf(iso, gran); let r = out.get(p);
+      if (!r) { r = {period: p, units: 0, revenue: 0, dates: new Set(), start: iso, end: iso}; out.set(p, r); }
+      r.units += s.u[i]; r.revenue += s.r[i] || 0; r.dates.add(iso); if (iso < r.start) r.start = iso; if (iso > r.end) r.end = iso; } }
+  return [...out.values()].sort((a, b) => a.period.localeCompare(b.period)).map(r => ({...r, days: r.dates.size, partial: r.dates.size < periodDays(r.period, gran)}));
+}
+function demandAgg(f, gran) {
+  const out = new Map();
+  for (const [key, s] of Object.entries(D.hist || {})) {
+    const [sk, wh] = key.split("|"); if ((f.sku && sk !== f.sku) || (f.wh && wh !== f.wh)) continue;
+    for (let i = 0; i < s.v.length; i++) { const p = periodOf(addDays(s.start, i), gran); out.set(p, (out.get(p) || 0) + s.v[i]); } }
+  return out;
+}
+const SALES_TOTAL = (() => { const r = salesAgg({}, "year"); return {units: sum(r.map(x => x.units)), revenue: sum(r.map(x => x.revenue)), days: (() => { const s = new Set(); r.forEach(x => x.dates.forEach(d => s.add(d))); return s.size; })()}; })();
+
+/* =================== pages =================== */
+const PAGES = {
+  dashboard: {icon: "📊", title: "Executive Dashboard", render: pDashboard},
+  inventory: {icon: "📦", title: "Inventory Monitor", render: pInventory},
+  forecast: {icon: "📈", title: "Demand Forecast", render: pForecast},
+  sales: {icon: "💰", title: "Sales", render: pSales},
+  seasons: {icon: "🌦️", title: "Seasonal Insights", render: pSeasons},
+  alerts: {icon: "🚨", title: "Risk & Alerts", render: pAlerts},
+  recommendations: {icon: "💡", title: "Recommendations", render: pRecs},
+};
+
+function pDashboard() {
+  const cnt = (f, v) => DEC.filter(d => d[f] === v).length;
+  const e1 = ALR.length ? ALR.filter(a => a.alert_type === "E1_THRESHOLD").length : DEC.filter(d => d.e1_threshold_alert).length;
+  let h = header("📊 Executive Dashboard", "Stock position, risks and recommended actions across every SKU and warehouse, based on a 30-day AI demand forecast.");
+  h += `<div class="grid g4">${kpi("SKU / warehouse items evaluated", fmt(DEC.length), `${SKUS.length} SKUs × ${WHS.length} warehouses`, "info")}
+    ${kpi("REORDER", fmt(cnt("final_action", "REORDER")), "order from supplier", "warn")}${kpi("TRANSFER", fmt(cnt("final_action", "TRANSFER")), "move stock between warehouses", "info")}
+    ${kpi("NO ACTION", fmt(cnt("final_action", "NO_ACTION")), "stock is sufficient", "good")}</div><div style="height:.75rem"></div>
+    <div class="grid g4">${kpi("🔴 HIGH stock-out risk", fmt(cnt("risk_status", "HIGH")), "will run out within lead time", "crit")}
+    ${kpi("🟠 MEDIUM stock-out risk", fmt(cnt("risk_status", "MEDIUM")), "will dip into safety stock", "warn")}
+    ${kpi("🔴 HIGH expiry risk", fmt(cnt("expiry_risk", "HIGH")), "stock may expire within 30 days", "crit")}
+    ${kpi("🟡 E1 threshold alerts", fmt(e1), "usable stock ≤ min threshold", "attn")}</div><div style="height:.75rem"></div>
+    <div class="grid g4">${kpi("Usable stock (units)", fmt(sum(DEC.map(d => d.usable_stock_before))), `${fmt(sum(DEC.map(d => d.expired_stock)))} units already expired`)}
+    ${kpi("Units to transfer", fmt(sum(TRF.map(t => t.transfer_quantity))), `${TRF.length} batch transfers`)}
+    ${kpi("Units to reorder", fmt(sum(DEC.map(d => d.reorder_quantity))), `${cnt("final_action", "REORDER")} purchase orders`)}
+    ${kpi("Units sold (sales data)", fmt(SALES_TOTAL.units), D.salesRange ? `${niceDate(D.salesRange[0])} – ${niceDate(D.salesRange[1])}` : "sales.csv not found")}</div>`;
+  h += `<h2>Inventory &amp; risk distribution</h2><div class="two">${chart("c-ra")}${chart("c-rw")}</div>`;
+  h += `<h2>Decision trace — end-to-end demo</h2><div class="small" style="margin-bottom:.4rem">Follow one item from today's stock to the final decision.</div>${focusPicker()}`;
+  const d = DMAP[K(S.focus.sku, S.focus.wh)];
+  h += d ? trace(d) + `<div class="row"><button class="pri" type="button" data-open="${esc(K(d.sku_id, d.warehouse_id))}">Open full journey →</button></div>` : empty("No recommendation available.");
+  h += `<h2>Top recommendations</h2><div class="small" style="margin-bottom:.4rem">The most urgent items, highest risk first.</div>`;
+  const seen = new Set(), top = [];
+  for (const a of ALR) { const k = K(a.sku_id, a.warehouse_id); if (seen.has(k)) continue; seen.add(k); const x = DMAP[k]; if (!x || x.final_action === "NO_ACTION") continue; top.push([x, a]); if (top.length === 4) break; }
+  h += top.length ? `<div class="grid g4">${top.map(([x, a]) => `<div class="card" style="border-left-color:var(--${tone("risk", x.risk_status)});margin:0">
+    <div class="top"><span class="t">${esc(x.sku_id)} — ${esc(x.warehouse_id)}</span></div><div style="margin:.3rem 0">${riskBadge(x.risk_status, "STOCK-OUT ")}</div>
+    ${x.transfer_in_quantity ? `<div class="why">${fmt(x.transfer_in_quantity)} units received through internal transfer from ${esc((x.source_warehouses || []).join(", "))}</div>` : ""}
+    ${x.final_action === "REORDER" ? `<div class="why">Remaining shortage ≈ ${fmt(x.remaining_shortage, 2)} units</div>` : ""}
+    <div class="q">→ ${x.final_action === "REORDER" ? `REORDER ${fmt(x.reorder_quantity)} units` : actLabel(x.final_action)}</div>
+    <button type="button" data-open="${esc(K(x.sku_id, x.warehouse_id))}">Open journey →</button></div>`).join("")}</div>` : empty("No recommendation available.");
+  h += `<h2>Sales performance</h2>`;
+  const yr = salesAgg({}, "year");
+  h += yr.length ? `<div class="grid g4">${kpi("Units sold", fmt(SALES_TOTAL.units), `${SALES_TOTAL.days} days of sales`, "info")}${kpi("Revenue", fmt(SALES_TOTAL.revenue), "units sold × unit price", "info")}
+    ${kpi("Avg units / day", fmt(SALES_TOTAL.units / SALES_TOTAL.days), "all SKUs & warehouses", "info")}${kpi("Avg revenue / day", fmt(SALES_TOTAL.revenue / SALES_TOTAL.days), "all SKUs & warehouses", "info")}</div>
+    <div class="two w" style="margin-top:.75rem">${chart("c-sm")}<div>${table([{h: "Year"}, {h: "Days", n: 1}, {h: "Units sold", n: 1}, {h: "Revenue", n: 1}, {h: "Avg units / day", n: 1}, {h: "Avg revenue / day", n: 1}],
+      yr.map(r => `<tr><td>${r.period}${r.partial ? " (partial)" : ""}</td><td class="n">${r.days}</td><td class="n">${fmt(r.units)}</td><td class="n">${fmt(r.revenue)}</td><td class="n">${fmt(r.units / r.days, 1)}</td><td class="n">${fmt(r.revenue / r.days)}</td></tr>`).join(""))}
+      <div class="row" style="margin-top:.6rem"><a href="#/sales"><button type="button">Open Sales page →</button></a></div></div></div>` : empty("Sales data not available (data/sales.csv not found).");
+  return {html: h, after() {
+    const lv = ["HIGH", "MEDIUM", "LOW"], acts = ["REORDER", "TRANSFER", "NO_ACTION"];
+    plot("c-ra", acts.map(a => ({type: "bar", name: actLabel(a), x: lv.map(l => `${ICON[tone("risk", l)]} ${l}`), y: lv.map(l => DEC.filter(d => d.risk_status === l && d.final_action === a).length),
+      marker: {color: css("--" + tone("act", a)), line: {color: css("--card"), width: 2}}, hovertemplate: "%{x} risk<br>" + actLabel(a) + ": %{y} items<extra></extra>"})),
+      {barmode: "stack", title: "Items by stock-out risk → final action", yaxis: {title: "Items"}});
+    const ser = [["Stock-out HIGH", d => d.risk_status === "HIGH", "--crit"], ["Stock-out MEDIUM", d => d.risk_status === "MEDIUM", "--warn"], ["Expiry HIGH", d => d.expiry_risk === "HIGH", "--s3"]];
+    plot("c-rw", ser.map(([n, f, c]) => ({type: "bar", name: n, x: WHS, y: WHS.map(w => DEC.filter(d => d.warehouse_id === w && f(d)).length), marker: {color: css(c)},
+      hovertemplate: "%{x}<br>" + n + ": %{y} items<extra></extra>"})), {barmode: "group", title: "Risk items per warehouse", yaxis: {title: "Items"}});
+    const m = salesAgg({}, "month");
+    if (m.length) plot("c-sm", [{type: "bar", x: m.map(r => periodLabel(r.period, "month")), y: m.map(r => r.units), marker: {color: m.map(r => r.partial ? css("--s1l") : css("--s1"))},
+      customdata: m.map(r => [r.days, r.revenue, r.units / r.days]), hovertemplate: "<b>%{x}</b> · %{customdata[0]} days<br>Units: %{y:,}<br>Revenue: %{customdata[1]:,.0f}<br>Avg/day: %{customdata[2]:,.0f}<extra></extra>"}],
+      {title: "Monthly units sold — all SKUs & warehouses (light = partial month)", showlegend: false, yaxis: {title: "Units sold"}}, 320);
+  }};
+}
+
+function pInventory() {
+  const f = S.inv;
+  let v = DEC.filter(d => (!f.sku || d.sku_id === f.sku) && (!f.wh || d.warehouse_id === f.wh) && (!f.risk || d.risk_status === f.risk) && (!f.act || d.final_action === f.act) && (!f.e1 || d.e1_threshold_alert));
+  let h = header("📦 Inventory Monitor", "Stock position for every SKU and warehouse. Usable stock excludes expired batches; required stock = forecast demand during the supplier lead time + safety stock.");
+  h += `<div class="filters">${sel("SKU", "inv.sku", SKUS, f.sku, "All SKUs")}${sel("Warehouse", "inv.wh", WHS, f.wh, "All warehouses")}
+    ${sel("Risk (stock-out)", "inv.risk", ["HIGH", "MEDIUM", "LOW"], f.risk, "All risk levels")}${sel("Action", "inv.act", [{v: "REORDER", t: "REORDER"}, {v: "TRANSFER", t: "TRANSFER"}, {v: "NO_ACTION", t: "NO ACTION"}], f.act, "All actions")}
+    <div><label class="chk"><input type="checkbox" data-k="inv.e1" ${f.e1 ? "checked" : ""}> Only E1 threshold alerts</label></div></div>`;
+  h += `<div class="grid g6">${kpi("Items shown", fmt(v.length), `of ${DEC.length}`, "info")}${kpi("🔴 HIGH risk", fmt(v.filter(d => d.risk_status === "HIGH").length), "", "crit")}
+    ${kpi("🟠 MEDIUM risk", fmt(v.filter(d => d.risk_status === "MEDIUM").length), "", "warn")}${kpi("🟡 E1 alerts", fmt(v.filter(d => d.e1_threshold_alert).length), "", "attn")}
+    ${kpi("Usable units", fmt(sum(v.map(d => d.usable_stock_before))), "")}${kpi("Required units", fmt(sum(v.map(d => d.required_stock))), "")}</div>`;
+  if (!v.length) return {html: h + `<div style="margin-top:1rem">${empty("No SKU/warehouse items match these filters.")}</div>`, after() {}};
+  const cols = [["SKU"], ["Warehouse"], ["Current stock", 1], ["Expired", 1], ["Usable stock", 1], ["Min threshold", 1], ["Safety stock", 1], ["Lead time (d)", 1], ["Lead-time demand", 1],
+    ["Required stock", 1], ["Projected inventory", 1], ["Days of stock", 1], ["Risk"], ["E1 alert"], ["Expiry risk"], ["Usable after transfers", 1], ["Final action"]];
+  const sorted = [...v].sort((a, b) => ({HIGH: 0, MEDIUM: 1, LOW: 2}[a.risk_status] - {HIGH: 0, MEDIUM: 1, LOW: 2}[b.risk_status]) || b.shortage_before - a.shortage_before);
+  const rows = sorted.map(d => `<tr class="click" data-open="${esc(K(d.sku_id, d.warehouse_id))}"><td>${esc(d.sku_id)}</td><td>${esc(d.warehouse_id)}</td><td class="n">${fmt(d.current_stock)}</td>
+    <td class="n">${fmt(d.expired_stock)}</td><td class="n"><b>${fmt(d.usable_stock_before)}</b></td><td class="n">${fmt(d.min_threshold)}</td><td class="n">${fmt(d.safety_stock)}</td><td class="n">${fmt(d.lead_time_days)}</td>
+    <td class="n">${fmt(d.lead_time_demand, 2)}</td><td class="n">${fmt(d.required_stock, 2)}</td><td class="n">${fmt(d.projected_inventory, 2)}</td><td class="n">${fmt(d.days_of_stock, 2)}</td>
+    <td>${iconTxt("risk", d.risk_status)}</td><td>${d.e1_threshold_alert ? "🟡 Yes" : "No"}</td><td>${iconTxt("risk", d.expiry_risk)}</td><td class="n">${fmt(d.usable_stock_after)}</td><td>${iconTxt("act", d.final_action)}</td></tr>`).join("");
+  h += `<h2>Inventory table</h2><div class="row small" style="margin-bottom:.4rem">Click a row to open that item's journey. ${csvOf("inventory", cols.map(c => c[0]),
+    sorted.map(d => [d.sku_id, d.warehouse_id, d.current_stock, d.expired_stock, d.usable_stock_before, d.min_threshold, d.safety_stock, d.lead_time_days, d.lead_time_demand, d.required_stock,
+      d.projected_inventory, d.days_of_stock, d.risk_status, d.e1_threshold_alert, d.expiry_risk, d.usable_stock_after, d.final_action]))}</div>
+    ${table(cols.map(c => ({h: c[0], n: c[1]})), rows)}`;
+  const big = v.length > 40;
+  h += `<h2>Usable stock vs required stock</h2>${big ? `<div class="small">Showing the 40 items with the largest shortage. Filter by SKU or warehouse to narrow down.</div>` : ""}${chart("c-uvr")}
+    <div class="small">A bar below its black required-stock tick is a shortage; above it is excess. Light bars show usable stock after the planned transfers.</div>
+    <div class="two" style="margin-top:1rem">${chart("c-wh")}${chart("c-cov")}</div>`;
+  return {html: h, after() {
+    const data = (big ? [...v].sort((a, b) => b.shortage_before - a.shortage_before).slice(0, 40) : [...v]).sort((a, b) => (a.sku_id + a.warehouse_id).localeCompare(b.sku_id + b.warehouse_id));
+    const x = data.map(d => d.sku_id + " · " + d.warehouse_id);
+    plot("c-uvr", [{type: "bar", name: "Usable stock now (colour = risk)", x, y: data.map(d => d.usable_stock_before), marker: {color: data.map(d => css("--" + tone("risk", d.risk_status)))},
+        customdata: data.map(d => [d.risk_status, actLabel(d.final_action), d.shortage_before]), hovertemplate: "<b>%{x}</b><br>Usable: %{y:,}<br>Risk: %{customdata[0]}<br>Shortage: %{customdata[2]:,.2f}<br>Action: %{customdata[1]}<extra></extra>"},
+      {type: "bar", name: "Usable after planned transfers", x, y: data.map(d => d.usable_stock_after), marker: {color: css("--s1l")}, hovertemplate: "<b>%{x}</b><br>After transfers: %{y:,}<extra></extra>"},
+      {type: "scatter", mode: "markers", name: "Required stock", x, y: data.map(d => d.required_stock), marker: {symbol: "line-ew", size: 22, line: {width: 3, color: css("--ink")}}, hovertemplate: "<b>%{x}</b><br>Required: %{y:,.2f}<extra></extra>"},
+      {type: "scatter", mode: "markers", name: "Min threshold (E1)", x, y: data.map(d => d.min_threshold), marker: {symbol: "diamond-open", size: 9, color: css("--muted"), line: {width: 2}}, hovertemplate: "<b>%{x}</b><br>Min threshold: %{y:,}<extra></extra>"}],
+      {barmode: "group", yaxis: {title: "Units"}, xaxis: {tickangle: data.length > 8 ? -45 : 0}}, 430);
+    const whs = uniq(v.map(d => d.warehouse_id)).sort();
+    plot("c-wh", ["HIGH", "MEDIUM", "LOW"].map(l => ({type: "bar", name: `${l} risk`, x: whs, y: whs.map(w => sum(v.filter(d => d.warehouse_id === w && d.risk_status === l).map(d => d.usable_stock_before))),
+      marker: {color: css("--" + tone("risk", l)), line: {color: css("--card"), width: 2}}, hovertemplate: "%{x}<br>" + l + " risk: %{y:,} usable units<extra></extra>"})),
+      {barmode: "stack", title: "Usable stock by warehouse (split by risk)", yaxis: {title: "Usable units"}});
+    const mx = Math.max(...v.map(d => d.lead_time_days || 0)) + 1;
+    plot("c-cov", ["HIGH", "MEDIUM", "LOW"].map(l => { const x = v.filter(d => d.risk_status === l && d.days_of_stock != null); return {type: "scatter", mode: "markers", name: `${l} risk`, x: x.map(d => d.lead_time_days), y: x.map(d => d.days_of_stock),
+      text: x.map(d => d.sku_id + " / " + d.warehouse_id), marker: {color: css("--" + tone("risk", l)), size: 9, opacity: .8}, hovertemplate: "%{text}<br>Lead time %{x} d<br>Days of stock %{y:.1f}<extra></extra>"}; }).filter(t => t.x.length)
+      .concat([{type: "scatter", mode: "lines", name: "Days of stock = lead time", x: [0, mx], y: [0, mx], line: {color: css("--muted"), dash: "dot", width: 1}, hoverinfo: "skip"}]),
+      {title: "Days of stock vs supplier lead time", xaxis: {title: "Lead time (days)", showgrid: true}, yaxis: {title: "Days of stock"}});
+  }};
+}
+
+function pForecast() {
+  const {sku, wh} = S.focus, d = DMAP[K(sku, wh)], fc = fcOf(sku, wh), hist = D.hist[K(sku, wh)];
+  let h = header("📈 Demand Forecast — item journey", `Past demand, the ${D.horizon}-day Chronos-2 AI forecast, and how it leads to the decision for one SKU and warehouse.`);
+  const quick = [["Demo", "M001", "W002"]];
+  const firstOf = f => DEC.find(f); const add = (l, x) => x && quick.push([l, x.sku_id, x.warehouse_id]);
+  add("A TRANSFER", firstOf(x => x.final_action === "TRANSFER" && x.transfer_in_quantity > 0)); add("A NO ACTION", firstOf(x => x.final_action === "NO_ACTION")); add("HIGH expiry", firstOf(x => x.expiry_risk === "HIGH"));
+  h += `<div class="quick">${quick.filter(q => DMAP[K(q[1], q[2])]).map(q => `<button type="button" data-open="${esc(K(q[1], q[2]))}">${esc(q[0])}: ${esc(q[1])} / ${esc(q[2])}</button>`).join("")}</div>`;
+  h += `<div class="filters" style="grid-template-columns:repeat(3,minmax(160px,260px))">${sel("SKU", "focus.sku", SKUS, sku)}${sel("Warehouse", "focus.wh", whsOf(sku), wh)}
+    ${sel("History shown", "fc.win", [{v: "60", t: "Last 60 days"}, {v: "120", t: "Last 120 days"}, {v: "180", t: "Last 180 days"}, {v: "all", t: "Full year"}], S.fc.win)}</div>`;
+  if (!fc.length) h += `<div class="note warn">No forecast available for this SKU/warehouse.${D.model.errors && D.model.errors[sku + "/" + wh] ? " Backend error: " + esc(D.model.errors[sku + "/" + wh]) : ""}</div>`;
+  else h += `<div class="grid g4">${kpi("Next day forecast", fmt(fc[0], 2), "forecast day 1", "info")}${kpi("Next 7 days", fmt(sum(fc.slice(0, 7)), 2), "derived from 30-day Chronos-2 forecast", "info")}
+    ${kpi(`Next ${fc.length} days`, fmt(sum(fc), 2), "sum of all forecast days", "info")}${kpi("Average daily demand", fmt(sum(fc) / fc.length, 2), `mean of ${fc.length} forecast values`, "info")}</div>
+    <div class="small" style="margin-top:.35rem">“Next 7 days” is the sum of days 1–7 of the single 30-day Chronos-2 forecast — there is no separate 7-day model.</div>`;
+  h += `<h2>Demand: history and forecast</h2>${chart("c-fc")}`;
+  if (d && d.seasonal_signal && d.seasonal_signal !== "NORMAL") h += `<div class="note info"><b>Seasonal demand signal: ${esc(d.seasonal_signal)}${d.seasonal_covariate_gap ? " · covariate gap" : ""}</b><br>${esc(d.seasonal_reason)}</div>`;
+  if (!d) return {html: h + empty("No recommendation available for this SKU/warehouse."), after: () => drawFc(hist, fc)};
+  h += `<h2>How the forecast feeds the decision</h2>${trace(d)}`;
+  h += `<div class="two" style="margin-top:.6rem"><div>${chart("c-proj")}<div class="small">Illustration: usable stock minus the cumulative forecast if nothing arrives. The black dot is the backend's projected inventory at the end of the ${fmt(d.lead_time_days)}-day lead time.</div></div>
+    <div class="panel"><div class="row" style="justify-content:space-between"><b>P1 stock-out risk</b>${riskBadge(d.risk_status)}</div><div class="small" style="margin:.3rem 0 .6rem">${esc(d.risk_reason)}</div>
+    <div class="row" style="justify-content:space-between"><b>E1 threshold</b>${d.e1_threshold_alert ? badge("ALERT", "attn") : badge("OK", "good")}</div><div class="small" style="margin:.3rem 0 .6rem">${esc(d.e1_reason)}</div>
+    <div class="row" style="justify-content:space-between"><b>Expiry risk</b>${riskBadge(d.expiry_risk)}</div><div class="small" style="margin-top:.3rem">${esc(d.expiry_reason)}</div></div></div>`;
+  const all = DEC.filter(x => x.sku_id === sku).sort((a, b) => a.warehouse_id.localeCompare(b.warehouse_id));
+  const srcs = trIn(sku, wh).map(t => t.source_warehouse), dests = trOut(sku, wh).map(t => t.destination_warehouse);
+  h += `<h2>Other warehouses holding ${esc(sku)}</h2><div class="two">${chart("c-oth")}<div>${table([{h: "Warehouse"}, {h: "Role"}, {h: "Usable", n: 1}, {h: "Required", n: 1}, {h: "Risk"}, {h: "Action"}],
+    all.map(x => `<tr class="click${x.warehouse_id === wh ? " sel" : ""}" data-open="${esc(K(x.sku_id, x.warehouse_id))}"><td>${esc(x.warehouse_id)}</td>
+    <td>${x.warehouse_id === wh ? "Selected" : srcs.includes(x.warehouse_id) ? "Sends to " + esc(wh) : dests.includes(x.warehouse_id) ? "Receives from " + esc(wh) : ""}</td>
+    <td class="n">${fmt(x.usable_stock_before)}</td><td class="n">${fmt(x.required_stock, 2)}</td><td>${iconTxt("risk", x.risk_status)}</td><td>${iconTxt("act", x.final_action)}</td></tr>`).join(""))}
+    <div class="small" style="margin-top:.3rem">Click a warehouse to switch to it.</div></div></div>`;
+  const bt = BAT.filter(b => b.sku_id === sku && b.warehouse_id === wh).sort((a, b) => a.days_to_expiry - b.days_to_expiry);
+  h += `<h2>Expiry — batches at ${esc(sku)} / ${esc(wh)}</h2>` + (bt.length ? table([{h: "Batch"}, {h: "Quantity", n: 1}, {h: "Expiry date"}, {h: "Days to expiry", n: 1}, {h: "Status"}, {h: "Usable"},
+    {h: "Forecast demand to expiry", n: 1}, {h: "Expected use", n: 1}, {h: "Potential expiry excess", n: 1}, {h: "Transfer eligible"}],
+    bt.map(b => `<tr><td>${esc(b.batch_id)}</td><td class="n">${fmt(b.quantity)}</td><td>${esc(b.expiry_date)}</td><td class="n">${fmt(b.days_to_expiry)}</td><td>${iconTxt("exp", b.expiry_status)}</td>
+    <td>${b.usable ? "Yes" : "No (expired)"}</td><td class="n">${fmt(b.forecast_demand_through_expiry, 2)}</td><td class="n">${fmt(b.expected_consumption, 2)}</td>
+    <td class="n">${(b.potential_expiry_excess || 0) > 0 ? `<b style="color:var(--crit)">${fmt(b.potential_expiry_excess, 2)}</b>` : fmt(b.potential_expiry_excess, 2)}</td><td>${b.transfer_eligible ? "Yes" : "No"}</td></tr>`).join(""), {h: 300})
+    : empty("No batch / expiry data for this item."));
+  const tio = trIn(sku, wh).concat(trOut(sku, wh));
+  h += `<h2>Decision</h2>` + (d.final_action === "REORDER" ? reorderCard(d) : decisionCard(d)) + (tio.length ? `<details open><summary>Transfer records involving ${esc(sku)} / ${esc(wh)} (${tio.length})</summary><div class="cards2" style="margin-top:.5rem">${tio.map(transferCard).join("")}</div></details>` : "");
+  h += `<h2>Model</h2>` + modelPanel(sku, wh);
+  return {html: h, after() {
+    drawFc(hist, fc);
+    if (fc.length) { let c = d.usable_stock_before; const xs = fc.map((_, i) => addDays(D.fcStart, i)), ys = fc.map(v => (c -= v));
+      const lt = Math.min(d.lead_time_days, fc.length) - 1;
+      plot("c-proj", [{type: "scatter", mode: "lines", name: "Usable stock if nothing arrives", x: xs, y: ys, line: {color: css("--s1"), width: 2.4}},
+        {type: "scatter", mode: "markers", name: "Backend projected inventory", x: [xs[lt]], y: [d.projected_inventory], marker: {size: 11, color: css("--ink")}, hovertemplate: "Projected inventory at lead time: %{y:,.2f}<extra></extra>"}],
+        {title: "Usable stock vs cumulative forecast", yaxis: {title: "Units"},
+         shapes: [{type: "line", xref: "paper", x0: 0, x1: 1, y0: d.safety_stock, y1: d.safety_stock, line: {color: css("--crit"), dash: "dot"}},
+                  {type: "line", xref: "paper", x0: 0, x1: 1, y0: 0, y1: 0, line: {color: css("--muted"), width: 1}}],
+         annotations: [{xref: "paper", x: 1, xanchor: "right", y: d.safety_stock, text: "Safety stock", showarrow: false, yshift: 10, font: {color: css("--crit"), size: 11}}]}, 300); }
+    plot("c-oth", [{type: "bar", name: "Usable stock", x: all.map(x => x.warehouse_id), y: all.map(x => x.usable_stock_before),
+        marker: {color: all.map(x => x.warehouse_id === wh ? css("--s1") : srcs.includes(x.warehouse_id) ? css("--s2") : css("--s1l"))}},
+      {type: "scatter", mode: "markers", name: "Required stock", x: all.map(x => x.warehouse_id), y: all.map(x => x.required_stock), marker: {symbol: "line-ew", size: 26, line: {width: 3, color: css("--ink")}}}],
+      {title: `${sku}: usable vs required stock (blue = selected, orange = sends stock here)`, yaxis: {title: "Units"}}, 320);
+  }};
+}
+function drawFc(hist, fc) {
+  const tr = [];
+  let hs = hist ? hist.v.map((v, i) => ({x: addDays(hist.start, i), y: v})) : [];
+  if (S.fc.win !== "all") hs = hs.slice(-(+S.fc.win));
+  if (hs.length) tr.push({type: "scatter", mode: "lines", name: "Historical demand", x: hs.map(p => p.x), y: hs.map(p => p.y), line: {color: css("--s1"), width: 2}, hovertemplate: "%{x}<br>Actual demand: %{y:,}<extra></extra>"});
+  if (fc.length) { const last = hs[hs.length - 1];
+    tr.push({type: "scatter", mode: "lines+markers", name: `Chronos-2 forecast (${fc.length} days)`, x: (last ? [last.x] : []).concat(fc.map((_, i) => addDays(D.fcStart, i))),
+      y: (last ? [last.y] : []).concat(fc), line: {color: css("--s2"), width: 2.4, dash: "dash"}, marker: {size: 5}, hovertemplate: "%{x}<br>Forecast: %{y:,.2f}<extra></extra>"}); }
+  plot("c-fc", tr, {yaxis: {title: "Units / day", rangemode: "tozero"}, hovermode: "x unified",
+    shapes: fc.length ? [{type: "rect", xref: "x", yref: "paper", x0: D.asOf, x1: addDays(D.fcStart, fc.length - 1), y0: 0, y1: 1, fillcolor: css("--s2"), opacity: .08, line: {width: 0}}] : []}, 380);
+}
+function modelPanel(sku, wh) {
+  const m = D.model, ev = (D.evals || []).filter(e => e.sku_id === sku && e.warehouse_id === wh), other = (D.evals || []).filter(e => !(e.sku_id === sku && e.warehouse_id === wh));
+  let h = `<div class="panel"><div class="grid g5">${kpi("Model", "Chronos-2", m.name || "")}${kpi("Horizon", `${D.horizon} days`, "one forecast per SKU/warehouse")}
+    ${kpi("Point forecast", `q${m.quantile ?? 0.5}`, "median")}${kpi("Covariates", esc((m.covariates || []).join(", ")), m.strategy || "")}${kpi("Forecast run", m.generated ? esc(localTime(m.generated)) : "—", REAL ? "real Chronos-2" : "STAND-IN")}</div>`;
+  h += `<div style="margin-top:.7rem"><b>Holdout accuracy (MAE / RMSE)</b></div>`;
+  if (ev.length) h += table([{h: "Horizon"}, {h: "Window"}, {h: "Chronos-2 MAE", n: 1}, {h: "Chronos-2 RMSE", n: 1}, {h: "7-day MA MAE", n: 1}, {h: "7-day MA RMSE", n: 1}],
+    ev.map(e => `<tr><td>${e.horizon_days} d</td><td>${esc(e.evaluation_period)}</td><td class="n">${fmt(e.chronos_mae, 2)}</td><td class="n">${fmt(e.chronos_rmse, 2)}</td><td class="n">${fmt(e.baseline_mae, 2)}</td><td class="n">${fmt(e.baseline_rmse, 2)}</td></tr>`).join(""), {h: 200})
+    + `<div class="small">Single series, single holdout window. Not overall model accuracy.</div>`;
+  else h += `<div class="small">Not available for this SKU/warehouse.${other.length ? ` Measured for: ${other.map(e => esc(e.sku_id + "/" + e.warehouse_id)).join(", ")}.` : ""}</div>`;
+  return h + `</div>`;
+}
+
+const lbl0 = g => ({year: "year", month: "month", week: "week", date: "day"}[g]);
+function pSales() {
+  let h = header("💰 Sales", `Sales from the sales dataset${D.salesRange ? ` (${niceDate(D.salesRange[0])} – ${niceDate(D.salesRange[1])})` : ""}. Pick a month and year, or see the trends.`);
+  if (!Object.keys(D.sales || {}).length) return {html: h + empty("Sales data not available (data/sales.csv not found)."), after() {}};
+  h += `<div class="tabs"><button type="button" data-stab="period" class="${S.sl.tab === "period" ? "on" : ""}">📅 Month / Year</button><button type="button" data-stab="trends" class="${S.sl.tab === "trends" ? "on" : ""}">📈 Trends (all data)</button></div>`;
+  return S.sl.tab === "trends" ? salesTrends(h) : salesPeriod(h);
+}
+function salesTrends(h) {
+  const f = S.sl, gran = f.gran;
+  const skus = uniq(Object.keys(D.sales).map(k => k.split("|")[0])).sort(), whs = uniq(Object.keys(D.sales).map(k => k.split("|")[1])).sort();
+  h += `<div class="filters">${sel("SKU", "sl.sku", skus, f.sku, "All SKUs")}${sel("Warehouse", "sl.wh", whs, f.wh, "All warehouses")}
+    ${sel("View by", "sl.gran", [{v: "date", t: "Date (daily)"}, {v: "week", t: "Week"}, {v: "month", t: "Month"}, {v: "year", t: "Year"}], gran)}
+    ${sel("Show", "sl.measure", [{v: "units", t: "Units sold (total)"}, {v: "revenue", t: "Revenue (total)"}, {v: "units_day", t: "Units sold (avg per day)"}, {v: "revenue_day", t: "Revenue (avg per day)"}], f.measure)}</div>`;
+  const rows = salesAgg(f, gran); if (!rows.length) return {html: h + empty("No sales records for this selection."), after() {}};
+  const U = sum(rows.map(r => r.units)), R = sum(rows.map(r => r.revenue)), days = new Set(); rows.forEach(r => r.dates.forEach(x => days.add(x)));
+  const scope = `${f.sku || "all SKUs"} · ${f.wh || "all warehouses"}`;
+  h += `<div class="grid g6">${kpi("Units sold", fmt(U), scope, "info")}${kpi("Revenue", fmt(R), `${days.size} days`, "info")}${kpi("Avg units / day", fmt(U / days.size, 1), "total ÷ days", "info")}
+    ${kpi("Avg revenue / day", fmt(R / days.size), "total ÷ days", "info")}${kpi("Avg unit price", fmt(R / U, 2), "revenue ÷ units", "info")}
+    ${kpi({year: "Years", month: "Months", week: "Weeks", date: "Days"}[gran], fmt(rows.length), rows.some(r => r.partial) ? "some partial periods" : "")}</div>`;
+  const best = [...rows].sort((a, b) => b.units - a.units)[0], worst = [...rows].filter(r => !r.partial).sort((a, b) => a.units - b.units)[0];
+  if (gran !== "date" && best) h += `<div class="small" style="margin-top:.5rem">Highest ${lbl0(gran)}: <b>${esc(periodLabel(best.period, gran))}</b> (${fmt(best.units)} units)${worst ? ` · lowest full ${lbl0(gran)}: <b>${esc(periodLabel(worst.period, gran))}</b> (${fmt(worst.units)} units)` : ""}</div>`;
+  h += `<h2>Units sold vs demand</h2>${chart("c-svd")}<div class="small">Demand = the demand history the forecasting model uses (planning timeline ending ${niceDate(D.asOf)}). Sales and demand are separate datasets.</div>`;
+  h += `<h2>${f.measure.startsWith("revenue") ? "Revenue" : "Units sold"}${f.measure.endsWith("_day") ? " — average per day" : ""}</h2>${chart("c-sv")}`;
+  h += `<div class="two">${chart("c-dow")}${chart("c-mavg")}</div><div class="two">${chart("c-top")}${chart("c-bywh")}</div>`;
+  const lbl = {date: "Date", week: "Week starting", month: "Month", year: "Year"}[gran];
+  const detail = [...rows].reverse();
+  h += `<h2>${{date: "Daily", week: "Weekly", month: "Monthly", year: "Yearly"}[gran]} detail</h2><div class="row small" style="margin-bottom:.4rem">Light bars / “partial” = periods only partly covered by the sales data. ${csvOf("sales",
+    [lbl, "From", "To", "Days", "Units sold", "Revenue", "Avg units/day", "Avg revenue/day"], detail.map(r => [r.period, r.start, r.end, r.days, r.units, r.revenue.toFixed(2), (r.units / r.days).toFixed(1), (r.revenue / r.days).toFixed(2)]))}</div>
+    ${table([{h: lbl}, {h: "From"}, {h: "To"}, {h: "Days", n: 1}, {h: "Units sold", n: 1}, {h: "Revenue", n: 1}, {h: "Avg units / day", n: 1}, {h: "Avg revenue / day", n: 1}],
+      detail.map(r => `<tr><td>${esc(periodLabel(r.period, gran))}${r.partial && gran !== "date" ? " (partial)" : ""}</td><td>${r.start}</td><td>${r.end}</td><td class="n">${r.days}</td><td class="n">${fmt(r.units)}</td>
+      <td class="n">${fmt(r.revenue, 2)}</td><td class="n">${fmt(r.units / r.days, 1)}</td><td class="n">${fmt(r.revenue / r.days, 2)}</td></tr>`).join(""))}`;
+  return {html: h, after() {
+    const x = rows.map(r => periodLabel(r.period, gran)), dm = demandAgg(f, gran);
+    const both = [{type: gran === "date" ? "scatter" : "bar", mode: "lines", name: "Units sold", x, y: rows.map(r => r.units), marker: {color: css("--s1")}, line: {color: css("--s1"), width: 1.6}}];
+    const dp = [...dm.keys()].sort();
+    both.push({type: "scatter", mode: gran === "date" ? "lines" : "lines+markers", name: "Demand (planning history)", x: dp.map(p => periodLabel(p, gran)), y: dp.map(p => dm.get(p)), line: {color: css("--s2"), width: 2}});
+    plot("c-svd", both, {yaxis: {title: "Units"}, hovermode: "x unified", xaxis: gran === "year" ? {type: "category"} : {}}, 340);
+    const m = f.measure, val = r => m === "units" ? r.units : m === "revenue" ? r.revenue : m === "units_day" ? r.units / r.days : r.revenue / r.days;
+    plot("c-sv", [{type: gran === "date" ? "scatter" : "bar", mode: "lines", x, y: rows.map(val), marker: {color: rows.map(r => r.partial && gran !== "date" ? css("--s1l") : css("--s1"))}, line: {color: css("--s1")},
+      customdata: rows.map(r => [r.days, r.units, r.revenue]), hovertemplate: "<b>%{x}</b> · %{customdata[0]} days<br>Units: %{customdata[1]:,}<br>Revenue: %{customdata[2]:,.2f}<extra></extra>"}],
+      {showlegend: false, yaxis: {title: {units: "Units sold", revenue: "Revenue", units_day: "Units / day", revenue_day: "Revenue / day"}[m]}, xaxis: gran === "year" ? {type: "category"} : {}}, 320);
+    // average units per weekday and average units/day per calendar month (always from daily data)
+    const daily = salesAgg(f, "date"), DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], dw = DOW.map(() => [0, 0]);
+    daily.forEach(r => { const i = (new Date(r.period + "T00:00:00Z").getUTCDay() + 6) % 7; dw[i][0] += r.units; dw[i][1] += 1; });
+    plot("c-dow", [{type: "bar", x: DOW, y: dw.map(([u, n]) => n ? u / n : null), marker: {color: css("--s1")}, hovertemplate: "%{x}: %{y:,.0f} units/day on average<extra></extra>"}],
+      {title: `Average units sold by day of week (${scope})`, showlegend: false, yaxis: {title: "Avg units / day"}}, 320);
+    const mm = salesAgg(f, "month");
+    plot("c-mavg", [{type: "scatter", mode: "lines+markers", x: mm.map(r => periodLabel(r.period, "month")), y: mm.map(r => r.units / r.days), line: {color: css("--s2"), width: 2.4},
+      customdata: mm.map(r => [r.days, r.revenue / r.days]), hovertemplate: "<b>%{x}</b> (%{customdata[0]} days)<br>Avg units/day: %{y:,.1f}<br>Avg revenue/day: %{customdata[1]:,.0f}<extra></extra>"}],
+      {title: `Average units sold per day, by month (${scope})`, showlegend: false, yaxis: {title: "Avg units / day"}}, 320);
+    // top SKUs by revenue (current warehouse filter) and revenue by warehouse (current SKU filter)
+    const bySku = {}, byWh = {};
+    for (const [key, s] of Object.entries(D.sales)) { const [sk, w] = key.split("|"); const rev = sum(s.r);
+      if (!f.wh || w === f.wh) bySku[sk] = (bySku[sk] || 0) + rev; if (!f.sku || sk === f.sku) byWh[w] = (byWh[w] || 0) + rev; }
+    const top = Object.entries(bySku).sort((a, b) => b[1] - a[1]).slice(0, 10).reverse();
+    plot("c-top", [{type: "bar", orientation: "h", y: top.map(t => t[0]), x: top.map(t => t[1]), marker: {color: top.map(t => t[0] === f.sku ? css("--s2") : css("--s1"))}, hovertemplate: "%{y}: %{x:,.0f}<extra></extra>"}],
+      {title: `Top 10 SKUs by revenue (${f.wh || "all warehouses"})`, showlegend: false, xaxis: {title: "Revenue", showgrid: true}, margin: {l: 60, r: 16, t: 44, b: 45}}, 340);
+    const wl = Object.keys(byWh).sort();
+    plot("c-bywh", [{type: "bar", x: wl, y: wl.map(w => byWh[w]), marker: {color: wl.map(w => w === f.wh ? css("--s2") : css("--s1"))}, hovertemplate: "%{x}: %{y:,.0f}<extra></extra>"}],
+      {title: `Revenue by warehouse (${f.sku || "all SKUs"})`, showlegend: false, yaxis: {title: "Revenue"}}, 340);
+  }};
+}
+
+function pAlerts() {
+  const f = S.al;
+  let h = header("🚨 Risk & Alerts", "Alerts from the MedCare alert engine, most urgent first, and batch-level expiry intelligence.");
+  h += `<div class="tabs"><button type="button" data-tab="alerts" class="${f.tab === "alerts" ? "on" : ""}">🚨 Alerts</button><button type="button" data-tab="expiry" class="${f.tab === "expiry" ? "on" : ""}">⏳ Batch expiry intelligence</button><button type="button" data-tab="email" class="${f.tab === "email" ? "on" : ""}">📧 Email notifications</button></div>`;
+  if (f.tab === "expiry") return expiryTab(h);
+  if (f.tab === "email") return {html: h + emailPanel(), after() {}};
+  if (!ALR.length) return {html: h + `<div class="note info">No active alerts.</div>`, after() {}};
+  const sc = s => ALR.filter(a => a.severity === s).length;
+  h += `<div class="grid g5">${kpi("Total alerts", fmt(ALR.length), "", "info")}${kpi("🔴 HIGH", fmt(sc("HIGH")), "stock-out / expiry", "crit")}${kpi("🟠 MEDIUM", fmt(sc("MEDIUM")), "stock-out / expiry", "warn")}
+    ${kpi("🟡 LOW", fmt(sc("LOW")), "E1 threshold", "attn")}${kpi("🔵 INFO", fmt(sc("INFO")), "transfer / reorder", "info")}</div>`;
+  h += `<div class="two" style="margin-top:.8rem">${chart("c-at")}<div>${ALR.slice(0, 3).map(alertCard).join("")}</div></div>`;
+  const types = Object.keys(ALERT_LABEL).filter(t => ALR.some(a => a.alert_type === t));
+  h += `<h2>Alert table</h2><div class="filters">${sel("Severity", "al.sev", ["HIGH", "MEDIUM", "LOW", "INFO"].filter(s => ALR.some(a => a.severity === s)), f.sev, "All severities")}
+    ${sel("Alert type", "al.type", types.map(t => ({v: t, t: ALERT_LABEL[t]})), f.type, "All alert types")}${sel("SKU", "al.sku", uniq(ALR.map(a => a.sku_id)).sort(), f.sku, "All SKUs")}
+    ${sel("Warehouse", "al.wh", uniq(ALR.map(a => a.warehouse_id)).sort(), f.wh, "All warehouses")}</div>`;
+  const idx = ALR.map((a, i) => i).filter(i => { const a = ALR[i]; return (!f.sev || a.severity === f.sev) && (!f.type || a.alert_type === f.type) && (!f.sku || a.sku_id === f.sku) && (!f.wh || a.warehouse_id === f.wh); });
+  if (!idx.length) return {html: h + `<div class="note info">No active alerts for these filters.</div>`, after: drawAlertChart};
+  h += `<div class="row small" style="margin-bottom:.4rem">${idx.length} alerts · click a row to see full details. ${csvOf("alerts", ["Severity", "SKU", "Warehouse", "Alert type", "Message", "Value", "Value meaning", "Recommended action"],
+    idx.map(i => { const a = ALR[i]; return [a.severity, a.sku_id, a.warehouse_id, a.alert_type, a.message, a.value, a.value_label, a.recommended_action]; }))}</div>`;
+  h += table([{h: "Severity"}, {h: "SKU"}, {h: "Warehouse"}, {h: "Alert type"}, {h: "Message"}, {h: "Value", n: 1}, {h: "Value meaning"}, {h: "Recommended action"}],
+    idx.slice(0, 500).map(i => { const a = ALR[i]; return `<tr class="click${f.sel === i ? " sel" : ""}" data-alert="${i}"><td>${iconTxt("sev", a.severity)}</td><td>${esc(a.sku_id)}</td><td>${esc(a.warehouse_id)}</td>
+      <td>${esc(ALERT_LABEL[a.alert_type] || a.alert_type)}</td><td class="wrap">${esc(a.message)}</td><td class="n">${fmt(a.value, 2)}</td><td>${esc(VALUE_LABEL[a.value_label] || a.value_label)}</td><td>${iconTxt("act", a.recommended_action)}</td></tr>`; }).join(""));
+  if (f.sel !== null && ALR[f.sel]) { const a = ALR[f.sel], d = DMAP[K(a.sku_id, a.warehouse_id)];
+    h += `<h2 id="alert-detail">Alert detail — ${esc(a.sku_id)} / ${esc(a.warehouse_id)}</h2>${alertCard(a)}`;
+    if (d) { h += trace(d);
+      const bt = BAT.filter(b => b.sku_id === a.sku_id && b.warehouse_id === a.warehouse_id).sort((x, y) => x.days_to_expiry - y.days_to_expiry);
+      h += `<div class="two" style="margin-top:.6rem"><div><b>Batches at this position</b>${table([{h: "Batch"}, {h: "Qty", n: 1}, {h: "Expiry"}, {h: "Days", n: 1}, {h: "Status"}, {h: "Expiry excess", n: 1}],
+        bt.map(b => `<tr><td>${esc(b.batch_id)}</td><td class="n">${fmt(b.quantity)}</td><td>${esc(b.expiry_date)}</td><td class="n">${fmt(b.days_to_expiry)}</td><td>${iconTxt("exp", b.expiry_status)}</td><td class="n">${fmt(b.potential_expiry_excess, 2)}</td></tr>`).join(""), {h: 260})}</div>
+        <div><b>Recommended action</b>${d.final_action === "REORDER" ? reorderCard(d) : decisionCard(d)}</div></div>`; }
+    else h += empty("No recommendation available."); }
+  return {html: h, after() { drawAlertChart(); if (f.sel !== null && f.scroll) { f.scroll = false; const el = document.getElementById("alert-detail"); el && el.scrollIntoView({behavior: "smooth"}); } }};
+}
+function drawAlertChart() {
+  const types = Object.keys(ALERT_LABEL).filter(t => ALR.some(a => a.alert_type === t)), c = types.map(t => ALR.filter(a => a.alert_type === t).length);
+  const sev = t => (ALR.find(a => a.alert_type === t) || {}).severity;
+  plot("c-at", [{type: "bar", orientation: "h", y: types.map(t => ALERT_LABEL[t]), x: c, text: c, textposition: "outside", cliponaxis: false, marker: {color: types.map(t => css("--" + tone("sev", sev(t))))}, hovertemplate: "%{y}: %{x} alerts<extra></extra>"}],
+    {title: "Alerts by type (colour = severity)", showlegend: false, yaxis: {autorange: "reversed"}, xaxis: {showgrid: true}, margin: {l: 170, r: 30, t: 44, b: 40}}, 330);
+}
+function expiryTab(h) {
+  const f = S.ex;
+  if (!BAT.length) return {html: h + empty("No batch expiry data available."), after() {}};
+  h += `<div class="small" style="margin-bottom:.6rem">Batch-by-batch expiry check. Stock is used earliest-expiry-first against the demand forecast; “Potential expiry excess” is stock expected to expire before it can be used.</div>`;
+  h += `<div class="grid g5">${kpi("🔴 HIGH expiry-risk items", fmt(BSUM.filter(s => s.expiry_risk === "HIGH").length), "", "crit")}${kpi("🟠 MEDIUM expiry-risk items", fmt(BSUM.filter(s => s.expiry_risk === "MEDIUM").length), "", "warn")}
+    ${kpi("Batches with expiry excess", fmt(BAT.filter(b => (b.potential_expiry_excess || 0) > 0).length), "", "crit")}${kpi("Units forecast to expire unused", fmt(sum(BSUM.map(s => s.potential_expiry_excess)), 2), "across all batches", "warn")}
+    ${kpi("Expired units (unusable)", fmt(sum(BSUM.map(s => s.expired_quantity))), "excluded from usable stock")}</div>${chart("c-ex")}`;
+  h += `<div class="filters">${sel("SKU", "ex.sku", SKUS, f.sku, "All SKUs")}${sel("Warehouse", "ex.wh", WHS, f.wh, "All warehouses")}${sel("Item expiry risk", "ex.risk", ["HIGH", "MEDIUM", "LOW"], f.risk, "All")}
+    <div><label class="chk"><input type="checkbox" data-k="ex.only" ${f.only ? "checked" : ""}> Only batches with expiry excess</label></div></div>`;
+  const tmap = {}; TRF.forEach(t => { const k = t.sku_id + "|" + t.source_warehouse + "|" + t.batch_id; (tmap[k] = tmap[k] || []).push(`${String(t.transfer_type).replace(/_/g, " ").toLowerCase()}: ${t.transfer_quantity} → ${t.destination_warehouse}`); });
+  const v = BAT.filter(b => (!f.sku || b.sku_id === f.sku) && (!f.wh || b.warehouse_id === f.wh) && (!f.risk || b.item_risk === f.risk) && (!f.only || (b.potential_expiry_excess || 0) > 0))
+    .sort((a, b) => a.days_to_expiry - b.days_to_expiry || (b.potential_expiry_excess || 0) - (a.potential_expiry_excess || 0));
+  h += v.length ? table([{h: "Batch"}, {h: "SKU"}, {h: "Warehouse"}, {h: "Quantity", n: 1}, {h: "Expiry date"}, {h: "Days to expiry", n: 1}, {h: "Potential expiry excess", n: 1}, {h: "Item expiry risk"},
+      {h: "Expiry status"}, {h: "Planned transfer"}, {h: "Transfer eligible"}, {h: "Item final action"}],
+    v.map(b => { const d = DMAP[K(b.sku_id, b.warehouse_id)]; return `<tr class="click" data-open="${esc(K(b.sku_id, b.warehouse_id))}"><td>${esc(b.batch_id)}</td><td>${esc(b.sku_id)}</td><td>${esc(b.warehouse_id)}</td><td class="n">${fmt(b.quantity)}</td>
+      <td>${esc(b.expiry_date)}</td><td class="n">${fmt(b.days_to_expiry)}</td><td class="n"><b style="color:var(--${(b.potential_expiry_excess || 0) > 0 ? "crit" : "ink"})">${fmt(b.potential_expiry_excess, 2)}</b></td>
+      <td>${iconTxt("risk", b.item_risk)}</td><td>${iconTxt("exp", b.expiry_status)}</td><td>${esc((tmap[b.sku_id + "|" + b.warehouse_id + "|" + b.batch_id] || []).join("; ") || "—")}</td>
+      <td>${b.transfer_eligible ? "Yes" : "No"}</td><td>${d ? iconTxt("act", d.final_action) : "—"}</td></tr>`; }).join("")) : empty("No batches match these filters.");
+  return {html: h, after() {
+    const top = BSUM.filter(s => s.potential_expiry_excess > 0).sort((a, b) => b.potential_expiry_excess - a.potential_expiry_excess).slice(0, 20);
+    plot("c-ex", [{type: "bar", x: top.map(s => s.sku_id + " · " + s.warehouse_id), y: top.map(s => s.potential_expiry_excess), marker: {color: top.map(s => css("--" + tone("risk", s.expiry_risk)))},
+      customdata: top.map(s => [s.expiry_risk]), hovertemplate: "<b>%{x}</b><br>Potential expiry excess: %{y:,.2f}<br>Expiry risk: %{customdata[0]}<extra></extra>"}],
+      {title: `Top ${top.length} items by potential expiry excess (colour = expiry risk)`, showlegend: false, yaxis: {title: "Units"}, xaxis: {tickangle: -45}}, 340);
+  }};
+}
+
+function pRecs() {
+  const f = S.rec, lim = +f.limit;
+  let h = header("💡 Recommendations", "One final action for every SKU and warehouse: TRANSFER stock between warehouses, REORDER from the supplier, or NO ACTION.");
+  const byA = a => DEC.filter(d => d.final_action === a);
+  h += `<div class="grid g4">${kpi("REORDER decisions", fmt(byA("REORDER").length), `${fmt(sum(byA("REORDER").map(d => d.reorder_quantity)))} units`, "warn")}
+    ${kpi("TRANSFER decisions", fmt(byA("TRANSFER").length), "", "info")}${kpi("Transfer records", fmt(TRF.length), `${fmt(sum(TRF.map(t => t.transfer_quantity)))} units moved`, "info")}
+    ${kpi("NO ACTION", fmt(byA("NO_ACTION").length), "no shortage, nothing inbound", "good")}</div>`;
+  h += `<div class="filters" style="margin-top:.9rem">${sel("Show", "rec.act", [{v: "TRANSFER", t: "🔁 Transfer records (batch level)"}, {v: "TRANSFER_DEC", t: "🔁 TRANSFER decisions (warehouse level)"},
+    {v: "REORDER", t: "🛒 REORDER decisions"}, {v: "NO_ACTION", t: "✅ NO ACTION items"}], f.act)}${sel("SKU", "rec.sku", SKUS, f.sku, "All SKUs")}${sel("Warehouse", "rec.wh", WHS, f.wh, "All warehouses")}
+    ${sel("Cards to show", "rec.limit", ["10", "20", "50", "200"], f.limit)}</div>`;
+  let cards = [], csv = "";
+  if (f.act === "TRANSFER") {
+    const v = TRF.filter(t => (!f.sku || t.sku_id === f.sku) && (!f.wh || t.source_warehouse === f.wh || t.destination_warehouse === f.wh))
+      .sort((a, b) => (a.transfer_type !== "EXPIRY_PREVENTION") - (b.transfer_type !== "EXPIRY_PREVENTION") || a.days_to_expiry - b.days_to_expiry);
+    cards = v.map(transferCard);
+    csv = csvOf("recs", ["SKU", "Source", "Destination", "Batch", "Quantity", "Type", "Expiry date", "Days to expiry", "Reason"], v.map(t => [t.sku_id, t.source_warehouse, t.destination_warehouse, t.batch_id, t.transfer_quantity, t.transfer_type, t.expiry_date, t.days_to_expiry, t.reason]));
+    h += `<div class="small" style="margin-bottom:.4rem">Expiry-prevention transfers first, earliest expiry first.</div>`;
+  } else {
+    const a = f.act === "TRANSFER_DEC" ? "TRANSFER" : f.act, R = {HIGH: 0, MEDIUM: 1, LOW: 2};
+    const v = DEC.filter(d => d.final_action === a && (!f.sku || d.sku_id === f.sku) && (!f.wh || d.warehouse_id === f.wh))
+      .sort((x, y) => R[x.risk_status] - R[y.risk_status] || (y.remaining_shortage || 0) - (x.remaining_shortage || 0));
+    cards = v.map(a === "REORDER" ? reorderCard : decisionCard);
+    csv = csvOf("recs", ["SKU", "Warehouse", "Action", "Reorder qty", "Transfer in", "Transfer out", "Risk", "Expiry risk", "Usable before", "Usable after", "Required", "Remaining shortage", "Lead time", "Reason"],
+      v.map(d => [d.sku_id, d.warehouse_id, d.final_action, d.reorder_quantity, d.transfer_in_quantity, d.transfer_out_quantity, d.risk_status, d.expiry_risk, d.usable_stock_before, d.usable_stock_after, d.required_stock, d.remaining_shortage, d.lead_time_days, d.reason]));
+    if (a === "NO_ACTION") h += `<div class="small" style="margin-bottom:.4rem">The engine does not recommend an action for every item — these are covered as they are.</div>`;
+  }
+  h += `<div class="row small" style="margin-bottom:.5rem">Showing ${Math.min(lim, cards.length)} of ${cards.length}. ${csv}</div>`;
+  h += cards.length ? `<div class="cards2">${cards.slice(0, lim).join("")}</div>` : empty("No recommendation available for these filters.");
+  return {html: h, after() {}};
+}
+
+
+/* =================== Sales: one month / year =================== */
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const SALES_MONTHS = (() => { const m = salesAgg({}, "month"); return m.map(r => ({p: r.period, partial: r.partial})); })();
+function scanSales(f, prefix) {
+  // totals for one period (prefix "YYYY" or "YYYY-MM"), plus per-day, per-SKU and per-warehouse splits
+  const t = {units: 0, revenue: 0, days: new Set(), byDay: new Map(), bySku: {}, byWh: {}};
+  for (const [key, s] of Object.entries(D.sales || {})) {
+    const [sk, wh] = key.split("|"); if ((f.sku && sk !== f.sku) || (f.wh && wh !== f.wh)) continue;
+    for (let i = 0; i < s.u.length; i++) { if (s.u[i] == null) continue; const iso = addDays(s.start, i); if (!iso.startsWith(prefix)) continue;
+      const u = s.u[i], r = s.r[i] || 0; t.units += u; t.revenue += r; t.days.add(iso);
+      const bd = t.byDay.get(iso) || {u: 0, r: 0}; bd.u += u; bd.r += r; t.byDay.set(iso, bd);
+      (t.bySku[sk] = t.bySku[sk] || {u: 0, r: 0}); t.bySku[sk].u += u; t.bySku[sk].r += r;
+      (t.byWh[wh] = t.byWh[wh] || {u: 0, r: 0}); t.byWh[wh].u += u; t.byWh[wh].r += r; } }
+  t.nDays = t.days.size; return t;
+}
+function scanDemand(f, prefix, gran) {
+  const out = new Map();
+  for (const [key, s] of Object.entries(D.hist || {})) { const [sk, wh] = key.split("|"); if ((f.sku && sk !== f.sku) || (f.wh && wh !== f.wh)) continue;
+    for (let i = 0; i < s.v.length; i++) { const iso = addDays(s.start, i); if (!iso.startsWith(prefix)) continue; const p = periodOf(iso, gran); out.set(p, (out.get(p) || 0) + s.v[i]); } }
+  return out;
+}
+function salesPeriod(h) {
+  const f = S.sp, years = uniq(SALES_MONTHS.map(m => m.p.slice(0, 4))).sort();
+  if (!f.year) { const lastFull = [...SALES_MONTHS].reverse().find(m => !m.partial) || SALES_MONTHS[SALES_MONTHS.length - 1]; f.year = lastFull.p.slice(0, 4); f.month = lastFull.p; }
+  const monthsInYear = SALES_MONTHS.filter(m => m.p.startsWith(f.year));
+  if (f.month && !f.month.startsWith(f.year)) f.month = "";
+  const skus = uniq(Object.keys(D.sales).map(k => k.split("|")[0])).sort(), whs = uniq(Object.keys(D.sales).map(k => k.split("|")[1])).sort();
+  h += `<div class="filters">${sel("Year", "sp.year", years, f.year)}${sel("Month", "sp.month", monthsInYear.map(m => ({v: m.p, t: MONTHS[+m.p.slice(5, 7) - 1] + (m.partial ? " (partial)" : "")})), f.month, "All months of " + f.year)}
+    ${sel("SKU", "sp.sku", skus, f.sku, "All SKUs")}${sel("Warehouse", "sp.wh", whs, f.wh, "All warehouses")}</div>`;
+  const prefix = f.month || f.year, isMonth = !!f.month;
+  const label = isMonth ? `${MONTHS[+f.month.slice(5, 7) - 1]} ${f.year}` : `Year ${f.year}`;
+  const scope = `${f.sku || "all SKUs"} · ${f.wh || "all warehouses"}`;
+  const t = scanSales(f, prefix);
+  if (!t.nDays) return {html: h + empty(`No sales records for ${label} (${scope}).`), after() {}};
+  const partial = isMonth ? t.nDays < periodDays(f.month, "month") : t.nDays < periodDays(f.year, "year");
+  // previous period for comparison (average per day, so partial periods compare fairly)
+  let prev = null;
+  if (isMonth) { const [y, m] = f.month.split("-").map(Number), pd = new Date(Date.UTC(y, m - 2, 1)).toISOString().slice(0, 7); const pt = scanSales(f, pd); if (pt.nDays) prev = {label: `${MONTHS[+pd.slice(5, 7) - 1]} ${pd.slice(0, 4)}`, t: pt}; }
+  else { const py = String(+f.year - 1); const pt = scanSales(f, py); if (pt.nDays) prev = {label: py, t: pt}; }
+  const chg = prev ? (t.units / t.nDays) / (prev.t.units / prev.t.nDays) - 1 : null;
+  h += `<h2>${esc(label)} — ${esc(scope)}${partial ? " <span class='small'>(partial period: " + t.nDays + " days of data)</span>" : ""}</h2>`;
+  h += `<div class="grid g6">${kpi("Units sold", fmt(t.units), label, "info")}${kpi("Revenue", fmt(t.revenue), `${t.nDays} days`, "info")}
+    ${kpi("Avg units / day", fmt(t.units / t.nDays, 1), "total ÷ days", "info")}${kpi("Avg revenue / day", fmt(t.revenue / t.nDays), "total ÷ days", "info")}
+    ${kpi("Avg unit price", fmt(t.revenue / t.units, 2), "revenue ÷ units", "info")}
+    ${kpi(`vs ${prev ? prev.label : "previous period"}`, chg == null ? "—" : `${chg >= 0 ? "▲ +" : "▼ "}${(chg * 100).toFixed(1)}%`, "change in avg units / day", chg == null ? "neutral" : chg >= 0 ? "good" : "warn")}</div>`;
+  h += `${chart("c-sp")}<div class="small">Demand = the demand history the forecasting model uses for the same period (planning timeline). Sales and demand are separate datasets (the sales file runs at a higher volume than the demand file).</div>`;
+  const shareRow = (k, v) => `<tr><td>${esc(k)}</td><td class="n">${fmt(v.u)}</td><td class="n">${fmt(v.r, 2)}</td><td class="n">${fmt(v.u / t.nDays, 1)}</td><td class="n">${fmt(v.r / t.nDays)}</td><td class="n">${(v.r / t.revenue * 100).toFixed(1)}%</td></tr>`;
+  const cols = n => [{h: n}, {h: "Units sold", n: 1}, {h: "Revenue", n: 1}, {h: "Avg units / day", n: 1}, {h: "Avg revenue / day", n: 1}, {h: "Share of revenue", n: 1}];
+  const skuRows = Object.entries(t.bySku).sort((a, b) => b[1].r - a[1].r), whRows = Object.entries(t.byWh).sort((a, b) => a[0].localeCompare(b[0]));
+  h += `<div class="two" style="margin-top:.6rem">`;
+  h += f.sku ? `<div>${chart("c-sp-wh")}</div>` : `<div><b>By SKU (${esc(label)})</b>${table(cols("SKU"), skuRows.map(([k, v]) => shareRow(k, v)).join(""), {h: 380})}</div>`;
+  h += f.wh ? `<div>${chart("c-sp-sku")}</div>` : `<div><b>By warehouse (${esc(label)})</b>${table(cols("Warehouse"), whRows.map(([k, v]) => shareRow(k, v)).join(""), {h: 380})}</div>`;
+  h += `</div>`;
+  const days = [...t.byDay.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  const detail = isMonth ? days.map(([d, v]) => [d, v.u, v.r.toFixed(2)]) : salesAgg(f, "month").filter(r => r.period.startsWith(f.year)).map(r => [r.period, r.units, r.revenue.toFixed(2)]);
+  h += `<h2>${isMonth ? "Daily" : "Monthly"} detail — ${esc(label)}</h2><div class="row small" style="margin-bottom:.4rem">${csvOf("sales_period", [isMonth ? "Date" : "Month", "Units sold", "Revenue"], detail)}</div>
+    ${table([{h: isMonth ? "Date" : "Month"}, {h: "Units sold", n: 1}, {h: "Revenue", n: 1}], detail.map(r => `<tr><td>${esc(isMonth ? niceDate(r[0]) : periodLabel(r[0], "month"))}</td><td class="n">${fmt(r[1])}</td><td class="n">${fmt(r[2], 2)}</td></tr>`).join(""), {h: 360})}`;
+  return {html: h, after() {
+    const gran = isMonth ? "date" : "month", dm = scanDemand(f, prefix, gran);
+    const sx = isMonth ? days.map(d => d[0]) : salesAgg(f, "month").filter(r => r.period.startsWith(f.year)).map(r => r.period);
+    const sy = isMonth ? days.map(d => d[1].u) : salesAgg(f, "month").filter(r => r.period.startsWith(f.year)).map(r => r.units);
+    const dx = [...dm.keys()].sort();
+    plot("c-sp", [{type: "bar", name: "Units sold", x: sx.map(p => periodLabel(p, gran)), y: sy, marker: {color: css("--s1")}},
+      {type: "scatter", mode: "lines+markers", name: "Demand (planning history)", x: dx.map(p => periodLabel(p, gran)), y: dx.map(p => dm.get(p)), line: {color: css("--s2"), width: 2}, marker: {size: 5}}],
+      {title: `${isMonth ? "Daily" : "Monthly"} units sold vs demand — ${label} (${scope})`, yaxis: {title: "Units"}, hovermode: "x unified", xaxis: {type: "category", tickangle: isMonth ? -45 : 0}}, 360);
+    if (f.sku) { const w = Object.keys(t.byWh).sort(); plot("c-sp-wh", [{type: "bar", x: w, y: w.map(k => t.byWh[k].r), marker: {color: w.map(k => k === f.wh ? css("--s2") : css("--s1"))}, hovertemplate: "%{x}: %{y:,.0f}<extra></extra>"}],
+      {title: `${f.sku} revenue by warehouse — ${label}`, showlegend: false, yaxis: {title: "Revenue"}}, 340); }
+    if (f.wh) { const top = Object.entries(t.bySku).sort((a, b) => b[1].r - a[1].r).slice(0, 10).reverse();
+      plot("c-sp-sku", [{type: "bar", orientation: "h", y: top.map(x => x[0]), x: top.map(x => x[1].r), marker: {color: top.map(x => x[0] === f.sku ? css("--s2") : css("--s1"))}, hovertemplate: "%{y}: %{x:,.0f}<extra></extra>"}],
+        {title: `Top SKUs by revenue at ${f.wh} — ${label}`, showlegend: false, xaxis: {title: "Revenue", showgrid: true}}, 340); }
+  }};
+}
+
+/* =================== Seasonal insights =================== */
+// Calendar groupings (India). Month numbers; edit here to change a season's months.
+const SEASONS = {
+  flu: {icon: "🤧", name: "Flu & Respiratory Season", sub: "Autumn – Winter", months: [10, 11, 12, 1, 2]},
+  allergy: {icon: "🌼", name: "Allergy & Hay Fever Season", sub: "Spring – Early Summer", months: [3, 4, 5]},
+  monsoon: {icon: "🌧️", name: "Monsoon & Vector-Borne Season", sub: "Rainy months / Late Summer", months: [6, 7, 8, 9]},
+};
+const inSeason = (iso, se) => se.months.includes(+iso.slice(5, 7));
+const monthsText = se => se.months.map(m => MONTHS[m - 1].slice(0, 3)).join(", ");
+function nextOccurrence(se) {
+  let d = addDays(D.asOf, 1); while (!inSeason(d, se)) d = addDays(d, 1);
+  let e = d; while (inSeason(addDays(e, 1), se)) e = addDays(e, 1); return [d, e];
+}
+function seasonStats(f, se) {
+  const r = {sIn: {u: 0, r: 0, d: new Set()}, sOut: {u: 0, r: 0, d: new Set()}, dIn: 0, dInN: new Set(), dOut: 0, dOutN: new Set(), flag: 0, flagN: 0,
+    bySku: {}, byWh: {}, monthly: new Map(), range: [null, null]};
+  for (const [key, s] of Object.entries(D.sales || {})) { const [sk, wh] = key.split("|"); if ((f.sku && sk !== f.sku) || (f.wh && wh !== f.wh)) continue;
+    for (let i = 0; i < s.u.length; i++) { if (s.u[i] == null) continue; const iso = addDays(s.start, i), yes = inSeason(iso, se), b = yes ? r.sIn : r.sOut;
+      b.u += s.u[i]; b.r += s.r[i] || 0; b.d.add(iso);
+      if (yes) { if (!r.range[0] || iso < r.range[0]) r.range[0] = iso; if (!r.range[1] || iso > r.range[1]) r.range[1] = iso; }
+      for (const [map, k] of [[r.bySku, sk], [r.byWh, wh]]) { const x = map[k] = map[k] || {inU: 0, inD: new Set(), outU: 0, outD: new Set()}; if (yes) { x.inU += s.u[i]; x.inD.add(iso); } else { x.outU += s.u[i]; x.outD.add(iso); } }
+      const m = iso.slice(0, 7), mm = r.monthly.get(m) || {u: 0, d: new Set()}; mm.u += s.u[i]; mm.d.add(iso); r.monthly.set(m, mm); } }
+  for (const [key, s] of Object.entries(D.hist || {})) { const [sk, wh] = key.split("|"); if ((f.sku && sk !== f.sku) || (f.wh && wh !== f.wh)) continue;
+    for (let i = 0; i < s.v.length; i++) { const iso = addDays(s.start, i); if (inSeason(iso, se)) { r.dIn += s.v[i]; r.dInN.add(iso); r.flag += (s.season ? s.season[i] : 0); r.flagN += 1; } else { r.dOut += s.v[i]; r.dOutN.add(iso); } } }
+  return r;
+}
+function pSeasons() {
+  const f = S.se, se = SEASONS[f.season];
+  let h = header("🌦️ Seasonal Insights", "Sales, demand and the forecast for three health seasons. Pick a season, then all SKUs / warehouses or a single one.");
+  h += `<div class="grid g4" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">${Object.entries(SEASONS).map(([k, x]) => `<button type="button" data-season="${k}" class="card" style="text-align:left;margin:0;cursor:pointer;border-left-color:var(--${k === f.season ? "brand" : "line"});${k === f.season ? "background:var(--info-bg)" : ""}">
+    <div class="t">${x.icon} ${esc(x.name)}</div><div class="small">${esc(x.sub)} · ${esc(monthsText(x))}</div></button>`).join("")}</div>`;
+  const skus = uniq(Object.keys(D.sales || {}).concat(Object.keys(D.hist || {})).map(k => k.split("|")[0])).sort();
+  h += `<div class="filters" style="margin-top:.8rem;grid-template-columns:repeat(2,minmax(160px,260px))">${sel("SKU", "se.sku", skus, f.sku, "All SKUs")}${sel("Warehouse", "se.wh", WHS, f.wh, "All warehouses")}</div>`;
+  const r = seasonStats(f, se), scope = `${f.sku || "all SKUs"} · ${f.wh || "all warehouses"}`;
+  const aIn = r.sIn.d.size ? r.sIn.u / r.sIn.d.size : null, aOut = r.sOut.d.size ? r.sOut.u / r.sOut.d.size : null, up = aIn && aOut ? aIn / aOut - 1 : null;
+  const dIn = r.dInN.size ? r.dIn / r.dInN.size : null, dOut = r.dOutN.size ? r.dOut / r.dOutN.size : null, dUp = dIn && dOut ? dIn / dOut - 1 : null;
+  const pct = v => v == null ? "—" : `${v >= 0 ? "▲ +" : "▼ "}${(v * 100).toFixed(1)}%`;
+  h += `<h2>${se.icon} ${esc(se.name)} — ${esc(scope)}</h2><div class="small" style="margin-bottom:.5rem">Months: ${esc(monthsText(se))}.${r.range[0] ? ` Sales data in this season: ${niceDate(r.range[0])} – ${niceDate(r.range[1])} (${r.sIn.d.size} days).` : " No sales data falls in this season."}</div>`;
+  h += `<div class="grid g6">${kpi("Units sold in season", fmt(r.sIn.u), `${r.sIn.d.size} days`, "info")}${kpi("Revenue in season", fmt(r.sIn.r), "", "info")}
+    ${kpi("Avg units / day in season", fmt(aIn, 1), `rest of year ${fmt(aOut, 1)}`, "info")}${kpi("Seasonal sales uplift", pct(up), "in-season vs rest of year, per day", up == null ? "neutral" : up >= 0 ? "good" : "warn")}
+    ${kpi("Share of yearly units", r.sIn.u + r.sOut.u ? `${(r.sIn.u / (r.sIn.u + r.sOut.u) * 100).toFixed(1)}%` : "—", `${se.months.length} of 12 months`)}
+    ${kpi("Demand uplift", pct(dUp), `avg/day ${fmt(dIn, 1)} vs ${fmt(dOut, 1)}`, dUp == null ? "neutral" : dUp >= 0 ? "good" : "warn")}</div>
+    <div class="small" style="margin-top:.35rem">In the demand data, the season flag was active on ${r.flagN ? (r.flag / r.flagN * 100).toFixed(0) : "—"}% of item-days in these months. The data has no disease or weather labels: seasons here are calendar months.</div>`;
+  h += `${chart("c-se-m")}`;
+  const upRows = (map) => Object.entries(map).map(([k, x]) => ({k, a: x.inD.size ? x.inU / x.inD.size : null, b: x.outD.size ? x.outU / x.outD.size : null, u: x.inU}))
+    .map(o => ({...o, up: o.a && o.b ? o.a / o.b - 1 : null})).sort((a, b) => (b.up ?? -9) - (a.up ?? -9));
+  const upTable = (title, rows, n) => `<div><b>${title}</b>${table([{h: n}, {h: "Units in season", n: 1}, {h: "Avg/day in season", n: 1}, {h: "Avg/day rest of year", n: 1}, {h: "Uplift", n: 1}],
+    rows.map(o => `<tr><td>${esc(o.k)}</td><td class="n">${fmt(o.u)}</td><td class="n">${fmt(o.a, 1)}</td><td class="n">${fmt(o.b, 1)}</td><td class="n" style="color:var(--${o.up >= 0 ? "good" : "warn"}-fg)">${pct(o.up)}</td></tr>`).join(""), {h: 360})}</div>`;
+  h += `<div class="two" style="margin-top:.6rem">${f.sku ? chart("c-se-wh") : upTable("SKUs with the biggest seasonal uplift", upRows(r.bySku), "SKU")}${f.wh ? chart("c-se-sku") : upTable("Warehouses", upRows(r.byWh), "Warehouse")}</div>`;
+
+  // ---- prediction for the next occurrence of this season
+  const [ns, ne] = nextOccurrence(se), fcDays = D.horizon, fcEnd = addDays(D.fcStart, fcDays - 1);
+  const overlap = []; for (let i = 0; i < fcDays; i++) { const d = addDays(D.fcStart, i); if (inSeason(d, se)) overlap.push(i); }
+  h += `<h2>🔮 Prediction — next ${esc(se.name)} (${niceDate(ns)} – ${niceDate(ne)})</h2>`;
+  const selDec = DEC.filter(d => (!f.sku || d.sku_id === f.sku) && (!f.wh || d.warehouse_id === f.wh));
+  if (overlap.length) {
+    let fcTot = 0; const perDay = new Array(fcDays).fill(0);
+    for (const d of selDec) { const v = fcOf(d.sku_id, d.warehouse_id); overlap.forEach(i => { fcTot += v[i] || 0; perDay[i] += v[i] || 0; }); }
+    const fcAvg = fcTot / overlap.length;
+    // same calendar window one year earlier (demand history)
+    let ly = 0, lyN = new Set(); const lyStart = addDays(D.fcStart, -365), lyEnd = addDays(fcEnd, -365);
+    for (const d of selDec) { const s = D.hist[K(d.sku_id, d.warehouse_id)]; if (!s) continue; s.v.forEach((v, i) => { const iso = addDays(s.start, i); if (iso >= lyStart && iso <= lyEnd && inSeason(iso, se)) { ly += v; lyN.add(iso); } }); }
+    const lyAvg = lyN.size ? ly / lyN.size : null, vsLy = lyAvg ? fcAvg / lyAvg - 1 : null;
+    const sig = s => selDec.filter(d => d.seasonal_signal === s).length;
+    h += `<div class="small" style="margin-bottom:.5rem">The Chronos-2 model forecasts ${fcDays} days ahead (${niceDate(D.fcStart)} – ${niceDate(fcEnd)}). ${overlap.length} of those days fall in this season, so the prediction below covers the start of the season.</div>
+      <div class="grid g6">${kpi("Forecast demand (season days)", fmt(fcTot), `${overlap.length} days · Chronos-2`, "info")}${kpi("Forecast avg / day", fmt(fcAvg, 1), scope, "info")}
+      ${kpi("Same days last year (avg / day)", fmt(lyAvg, 1), `${niceDate(lyStart)} – ${niceDate(lyEnd)}`)}${kpi("Forecast vs last year", pct(vsLy), "avg demand per day", vsLy == null ? "neutral" : vsLy >= 0 ? "warn" : "good")}
+      ${kpi("Last season avg / day", fmt(dIn, 1), "demand history, whole season")}${kpi("🔺 ELEVATED seasonal signal", fmt(sig("ELEVATED")), `${sig("SEASONAL")} seasonal · ${sig("NORMAL")} normal · ${selDec.filter(d => d.seasonal_covariate_gap).length} covariate gaps`, sig("ELEVATED") ? "warn" : "neutral")}</div>
+      ${chart("c-se-fc")}`;
+    const elev = selDec.filter(d => d.seasonal_signal === "ELEVATED" || d.seasonal_signal === "SEASONAL").sort((a, b) => (a.seasonal_signal === "ELEVATED" ? 0 : 1) - (b.seasonal_signal === "ELEVATED" ? 0 : 1) || ({HIGH: 0, MEDIUM: 1, LOW: 2}[a.risk_status] - {HIGH: 0, MEDIUM: 1, LOW: 2}[b.risk_status]));
+    h += elev.length ? `<div class="small" style="margin:.4rem 0">Items the backend flags as seasonal for the forecast window, with their current decision. “Covariate gap” = the season was active last year but not on ${niceDate(D.asOf)}, so the forecast may understate seasonal demand.</div>` +
+      table([{h: "SKU"}, {h: "Warehouse"}, {h: "Seasonal signal"}, {h: "Covariate gap"}, {h: "Stock-out risk"}, {h: "Final action"}, {h: "Forecast (season days)", n: 1}, {h: "Reason"}],
+        elev.map(d => `<tr class="click" data-open="${esc(K(d.sku_id, d.warehouse_id))}"><td>${esc(d.sku_id)}</td><td>${esc(d.warehouse_id)}</td><td>${d.seasonal_signal === "ELEVATED" ? badge("ELEVATED", "warn") : badge("SEASONAL", "attn", false)}</td>
+        <td>${d.seasonal_covariate_gap ? "Yes" : "No"}</td><td>${iconTxt("risk", d.risk_status)}</td><td>${iconTxt("act", d.final_action)}${d.final_action === "REORDER" ? " " + fmt(d.reorder_quantity) : ""}</td>
+        <td class="n">${fmt(overlap.reduce((a, i) => a + (fcOf(d.sku_id, d.warehouse_id)[i] || 0), 0), 1)}</td><td class="wrap">${esc(d.seasonal_reason)}</td></tr>`).join(""), {h: 380})
+      : `<div class="note info">No item in this selection is flagged as seasonal by the backend for the forecast window.</div>`;
+  } else {
+    h += `<div class="note info">No Chronos-2 prediction covers this season yet. The model forecasts ${fcDays} days ahead (${niceDate(D.fcStart)} – ${niceDate(fcEnd)}), and this season next starts on ${niceDate(ns)}.
+      Below is last season's actual data as the reference; it is history, not a prediction.</div>
+      <div class="grid g4">${kpi("Last season: demand avg / day", fmt(dIn, 1), scope)}${kpi("Last season: sales avg / day", fmt(aIn, 1), scope)}
+      ${kpi("Last season: units sold", fmt(r.sIn.u), r.range[0] ? `${niceDate(r.range[0])} – ${niceDate(r.range[1])}` : "")}${kpi("Days until season starts", fmt((Date.parse(ns) - Date.parse(D.asOf)) / MS), `from ${niceDate(D.asOf)}`)}</div>`;
+  }
+  return {html: h, after() {
+    const ms = [...r.monthly.keys()].sort();
+    plot("c-se-m", [{type: "bar", x: ms.map(m => periodLabel(m, "month")), y: ms.map(m => r.monthly.get(m).u / r.monthly.get(m).d.size),
+      marker: {color: ms.map(m => inSeason(m + "-01", se) ? css("--s2") : css("--s1l"))}, customdata: ms.map(m => [r.monthly.get(m).u, r.monthly.get(m).d.size]),
+      hovertemplate: "<b>%{x}</b><br>Avg units/day: %{y:,.1f}<br>Units: %{customdata[0]:,} (%{customdata[1]} days)<extra></extra>"}],
+      {title: `Average units sold per day by month — orange = ${se.name} (${scope})`, showlegend: false, yaxis: {title: "Avg units / day"}, xaxis: {type: "category"}}, 340);
+    const wrow = (map) => Object.entries(map).map(([k, x]) => [k, x.inD.size ? x.inU / x.inD.size : 0, x.outD.size ? x.outU / x.outD.size : 0]);
+    if (f.sku) { const w = wrow(r.byWh).sort((a, b) => a[0].localeCompare(b[0]));
+      plot("c-se-wh", [{type: "bar", name: "In season", x: w.map(x => x[0]), y: w.map(x => x[1]), marker: {color: css("--s2")}}, {type: "bar", name: "Rest of year", x: w.map(x => x[0]), y: w.map(x => x[2]), marker: {color: css("--s1l")}}],
+        {title: `${f.sku}: avg units/day in season vs rest of year, by warehouse`, barmode: "group", yaxis: {title: "Avg units / day"}}, 340); }
+    if (f.wh) { const w = wrow(r.bySku).map(x => [...x, x[2] ? x[1] / x[2] - 1 : 0]).sort((a, b) => b[3] - a[3]).slice(0, 12).reverse();
+      plot("c-se-sku", [{type: "bar", orientation: "h", y: w.map(x => x[0]), x: w.map(x => x[3] * 100), marker: {color: w.map(x => x[3] >= 0 ? css("--s2") : css("--s1l"))}, hovertemplate: "%{y}: %{x:.1f}% uplift<extra></extra>"}],
+        {title: `SKUs with the biggest seasonal uplift at ${f.wh}`, showlegend: false, xaxis: {title: "Uplift in avg units/day (%)", showgrid: true}}, 340); }
+    const fcEl = document.getElementById("c-se-fc");
+    if (fcEl) {
+      const selDec2 = DEC.filter(d => (!f.sku || d.sku_id === f.sku) && (!f.wh || d.warehouse_id === f.wh));
+      const hist = new Map(); for (const d of selDec2) { const s = D.hist[K(d.sku_id, d.warehouse_id)]; if (!s) continue; s.v.forEach((v, i) => { const iso = addDays(s.start, i); hist.set(iso, (hist.get(iso) || 0) + v); }); }
+      const hx = [...hist.keys()].sort().slice(-150), fx = [], fy = [];
+      for (let i = 0; i < D.horizon; i++) { fx.push(addDays(D.fcStart, i)); fy.push(selDec2.reduce((a, d) => a + (fcOf(d.sku_id, d.warehouse_id)[i] || 0), 0)); }
+      const lyx = [], lyy = []; for (let i = 0; i < D.horizon; i++) { const iso = addDays(D.fcStart, i - 365); if (hist.has(iso)) { lyx.push(addDays(D.fcStart, i)); lyy.push(hist.get(iso)); } }
+      plot("c-se-fc", [{type: "scatter", mode: "lines", name: "Demand history", x: hx, y: hx.map(x => hist.get(x)), line: {color: css("--s1"), width: 1.6}},
+        {type: "scatter", mode: "lines", name: "Same days last year", x: lyx, y: lyy, line: {color: css("--muted"), width: 1.4, dash: "dot"}},
+        {type: "scatter", mode: "lines+markers", name: "Chronos-2 forecast", x: fx, y: fy, line: {color: css("--s2"), width: 2.4, dash: "dash"}, marker: {size: 4}}],
+        {title: `Demand history and Chronos-2 forecast (${scope})`, yaxis: {title: "Units / day", rangemode: "tozero"}, hovermode: "x unified",
+         shapes: [{type: "rect", xref: "x", yref: "paper", x0: D.fcStart, x1: fcEnd, y0: 0, y1: 1, fillcolor: css("--s2"), opacity: .07, line: {width: 0}}]}, 360);
+    }
+  }};
+}
+
+/* =================== Email notifications panel =================== */
+function emailPanel() {
+  const N = D.notifications || [];
+  let h = `<h2>📧 Email notifications (red alerts)</h2>`;
+  if (!N.length) return h + `<div class="note info">No email notifications logged yet. Red alerts (HIGH stock-out and HIGH expiry) are emailed by <code>red_alert_mailer.py</code>; see FRONTEND_README.md to set it up, then rebuild this page to see the log here.</div>`;
+  const c = s => N.filter(n => n.status === s).length;
+  h += `<div class="grid g4">${kpi("✅ Sent", fmt(c("SENT")), "accepted by the mail server", "good")}${kpi("❌ Failed", fmt(c("FAILED")), "see error column", c("FAILED") ? "crit" : "neutral")}
+    ${kpi("📥 Outbox only", fmt(c("OUTBOX")), "recorded, not sent")}${kpi("Recipient", esc((N.find(n => n.recipient) || {}).recipient || "—"), "")}</div>`;
+  return h + `<div style="margin-top:.6rem">${table([{h: "Time (UTC)"}, {h: "Status"}, {h: "Severity"}, {h: "Alert type"}, {h: "SKU"}, {h: "Warehouse"}, {h: "Action"}, {h: "Error"}],
+    N.slice(0, 200).map(n => `<tr><td>${esc(n.created_at_utc)}</td><td>${n.status === "SENT" ? "✅ SENT" : n.status === "FAILED" ? "❌ FAILED" : "📥 " + esc(n.status)}</td><td>${iconTxt("sev", n.severity)}</td>
+    <td>${esc(ALERT_LABEL[n.alert_type] || n.alert_type)}</td><td>${esc(n.sku_id)}</td><td>${esc(n.warehouse_id)}</td><td>${esc(actLabel(n.recommended_action))}</td><td class="wrap small">${esc(n.error)}</td></tr>`).join(""), {h: 320})}</div>`;
+}
+
+/* =================== shell =================== */
+function chrome() {
+  $("#nav").innerHTML = Object.entries(PAGES).map(([k, p]) => `<a href="#/${k}" class="${S.page === k ? "on" : ""}"><span>${p.icon}</span>${p.title}</a>`).join("");
+  const d = DMAP[K(S.focus.sku, S.focus.wh)];
+  $("#focusbox").innerHTML = d ? `<b>${esc(d.sku_id)} / ${esc(d.warehouse_id)}</b><br><span class="m">Risk</span> ${esc(d.risk_status)} · <span class="m">Action</span> ${esc(actLabel(d.final_action))}${d.final_action === "REORDER" ? " " + fmt(d.reorder_quantity) : ""}<br><a href="#/forecast" style="color:#9ec5f4">Open journey →</a>` : "—";
+  $("#databox").innerHTML = `<span class="m">Data as of</span> ${niceDate(D.asOf)}<br><span class="m">Forecast</span> ${D.horizon} days · Chronos-2 ${REAL ? "" : "<b style='color:#ffb4a8'>(STAND-IN)</b>"}<br>
+    ${D.model.generated ? `<span class="m">Forecast run</span> ${esc(localTime(D.model.generated))}<br>` : ""}<span class="m">Dashboard built</span> ${esc(D.builtAt)}<br>
+    <span class="m">Items</span> ${DEC.length} · <span class="m">alerts</span> ${ALR.length} · <span class="m">transfers</span> ${TRF.length}`;
+  $("#chips").innerHTML = [`📅 Data as of ${niceDate(D.asOf)}`, `📈 ${D.horizon}-day demand forecast (Chronos-2 AI model)`, `🚚 Warehouse transfer time: ${D.transit} days`,
+    D.model.generated ? `🔄 Forecast updated ${localTime(D.model.generated)}` : null].filter(Boolean).map(c => `<span class="chip">${esc(c)}</span>`).join("");
+  $("#banner").innerHTML = REAL ? "" : `<div class="note crit"><b>⚠ STAND-IN FORECAST — not a real Chronos-2 result.</b> Produced by <code>${esc(D.model.pipeline)}</code>. Run <code>python main.py forecast-all --refresh</code>, <code>python main.py decide-all</code> and rebuild this page.</div>`;
+}
+function render() {
+  chrome();
+  let r; try { r = PAGES[S.page].render(); } catch (e) { console.error(e); r = {html: `<div class="note crit">This page could not be shown: ${esc(e.message)}</div>`, after() {}}; }
+  $("#view").innerHTML = r.html; try { r.after && r.after(); } catch (e) { console.error(e); }
+}
+function route() { const k = location.hash.replace("#/", "") || "dashboard"; S.page = PAGES[k] ? k : "dashboard"; window.scrollTo(0, 0); render(); }
+
+document.addEventListener("change", e => {
+  const k = e.target.dataset && e.target.dataset.k; if (!k) return;
+  const [g, f] = k.split("."), val = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+  if (g === "focus") { let s = S.focus.sku, w = S.focus.wh; if (f === "sku") { s = val; const ws = whsOf(s); w = ws.includes(w) ? w : ws[0]; } else w = val; setFocus(s, w); }
+  else { S[g][f] = val; if (g === "al") S.al.sel = null; }
+  const y = window.scrollY; render(); window.scrollTo(0, y);
+});
+document.addEventListener("click", e => {
+  const o = e.target.closest("[data-open]"); if (o) { const [s, w] = o.dataset.open.split("|"); setFocus(s, w); if (S.page === "forecast") { render(); window.scrollTo(0, 0); } else location.hash = "#/forecast"; return; }
+  const a = e.target.closest("[data-alert]"); if (a) { S.al.sel = +a.dataset.alert; S.al.scroll = true; const y = window.scrollY; render(); window.scrollTo(0, y); const el = document.getElementById("alert-detail"); el && el.scrollIntoView({behavior: "smooth"}); return; }
+  const t = e.target.closest("[data-tab]"); if (t) { S.al.tab = t.dataset.tab; render(); return; }
+  const st = e.target.closest("[data-stab]"); if (st) { S.sl.tab = st.dataset.stab; render(); return; }
+  const ss = e.target.closest("[data-season]"); if (ss) { S.se.season = ss.dataset.season; const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  const dl = e.target.closest("[data-dl]"); if (dl) { const blob = new Blob([CSV[dl.dataset.dl] || ""], {type: "text/csv"}); const u = URL.createObjectURL(blob);
+    const x = document.createElement("a"); x.href = u; x.download = `medcare_${dl.dataset.dl}.csv`; document.body.appendChild(x); x.click(); x.remove(); setTimeout(() => URL.revokeObjectURL(u), 1000); }
+});
+$("#theme").addEventListener("click", () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.dataset.theme = cur === "dark" ? "light" : "dark"; store.set("theme", document.documentElement.dataset.theme); render();
+});
+{ const t = store.get("theme", null); if (t) document.documentElement.dataset.theme = t; }
+if (!DEC.length) document.getElementById("view").innerHTML = `<div class="note crit">No Phase 9 decisions were embedded. Run the backend and rebuild this page.</div>`;
+else { window.addEventListener("hashchange", route); route(); }
+</script>
+</body>
+</html>

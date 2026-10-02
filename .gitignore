@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+email_settings.env
+.env
+.streamlit/secrets.toml
+untitled folder/
+# Iterative.py
+def fact(n)/

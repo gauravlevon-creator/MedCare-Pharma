@@ -1,0 +1,168 @@
+sku_id,warehouse_id,severity,alert_type,message,value,value_label,recommended_action,display_rank
+M023,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M023 at W003: projected usable inventory -318.39 after 7-day lead-time demand of 446.39 (safety stock 140). Shortage 458.39 units.,458.39,shortage_units,TRANSFER,1
+M004,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M004 at W005: projected usable inventory -285.37 after 8-day lead-time demand of 327.37 (safety stock 110). Shortage 395.37 units.,395.37,shortage_units,REORDER,1
+M004,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M004 at W003: projected usable inventory -185.53 after 5-day lead-time demand of 259.53 (safety stock 180). Shortage 365.53 units.,365.53,shortage_units,REORDER,1
+M027,W001,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M027 at W001: projected usable inventory -210.50 after 6-day lead-time demand of 324.50 (safety stock 150). Shortage 360.50 units.,360.5,shortage_units,TRANSFER,1
+M001,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M001 at W002: projected usable inventory -247.79 after 5-day lead-time demand of 367.79 (safety stock 80). Shortage 327.79 units. Seasonal demand signal: ELEVATED (historical seasonal demand pattern).,327.79,shortage_units,TRANSFER,1
+M016,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M016 at W005: projected usable inventory -219.33 after 8-day lead-time demand of 339.33 (safety stock 90). Shortage 309.33 units.,309.33,shortage_units,TRANSFER,1
+M027,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M027 at W003: projected usable inventory -121.33 after 6-day lead-time demand of 341.33 (safety stock 170). Shortage 291.33 units.,291.33,shortage_units,TRANSFER,1
+M025,W001,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M025 at W001: projected usable inventory -127.99 after 5-day lead-time demand of 244.99 (safety stock 160). Shortage 287.99 units.,287.99,shortage_units,TRANSFER,1
+M030,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M030 at W003: projected usable inventory -156.16 after 7-day lead-time demand of 199.16 (safety stock 90). Shortage 246.16 units.,246.16,shortage_units,REORDER,1
+M006,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M006 at W003: projected usable inventory -162.73 after 7-day lead-time demand of 250.73 (safety stock 80). Shortage 242.73 units.,242.73,shortage_units,TRANSFER,1
+M015,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M015 at W005: projected usable inventory -156.50 after 8-day lead-time demand of 192.50 (safety stock 80). Shortage 236.50 units.,236.5,shortage_units,TRANSFER,1
+M009,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M009 at W005: projected usable inventory -117.73 after 6-day lead-time demand of 359.73 (safety stock 110). Shortage 227.73 units. Seasonal demand signal: SEASONAL (historical seasonal demand pattern).,227.73,shortage_units,TRANSFER,1
+M012,W004,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M012 at W004: projected usable inventory -6.19 after 4-day lead-time demand of 423.19 (safety stock 220). Shortage 226.19 units. Seasonal demand signal: SEASONAL (historical seasonal demand pattern).,226.19,shortage_units,TRANSFER,1
+M024,W004,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M024 at W004: projected usable inventory -96.00 after 6-day lead-time demand of 232.00 (safety stock 120). Shortage 216.00 units.,216.0,shortage_units,TRANSFER,1
+M024,W001,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M024 at W001: projected usable inventory -78.54 after 5-day lead-time demand of 211.54 (safety stock 130). Shortage 208.54 units.,208.54,shortage_units,TRANSFER,1
+M016,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M016 at W002: projected usable inventory -67.93 after 5-day lead-time demand of 239.93 (safety stock 140). Shortage 207.93 units.,207.93,shortage_units,TRANSFER,1
+M009,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M009 at W002: projected usable inventory -121.42 after 5-day lead-time demand of 283.42 (safety stock 80). Shortage 201.42 units. Seasonal demand signal: SEASONAL (historical seasonal demand pattern).,201.42,shortage_units,TRANSFER,1
+M014,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M014 at W002: projected usable inventory -57.70 after 5-day lead-time demand of 198.70 (safety stock 140). Shortage 197.70 units.,197.7,shortage_units,TRANSFER,1
+M022,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M022 at W002: projected usable inventory -86.57 after 5-day lead-time demand of 215.57 (safety stock 110). Shortage 196.57 units.,196.57,shortage_units,TRANSFER,1
+M002,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M002 at W003: projected usable inventory -35.15 after 5-day lead-time demand of 418.15 (safety stock 160). Shortage 195.15 units. Seasonal demand signal: ELEVATED (historical seasonal demand pattern).,195.15,shortage_units,TRANSFER,1
+M025,W004,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M025 at W004: projected usable inventory -4.06 after 4-day lead-time demand of 245.06 (safety stock 190). Shortage 194.06 units.,194.06,shortage_units,TRANSFER,1
+M017,W001,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M017 at W001: projected usable inventory -68.43 after 4-day lead-time demand of 172.43 (safety stock 120). Shortage 188.43 units.,188.43,shortage_units,TRANSFER,1
+M015,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M015 at W003: projected usable inventory -114.08 after 7-day lead-time demand of 191.08 (safety stock 70). Shortage 184.08 units.,184.08,shortage_units,TRANSFER,1
+M014,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M014 at W005: projected usable inventory -82.36 after 6-day lead-time demand of 209.36 (safety stock 100). Shortage 182.36 units.,182.36,shortage_units,TRANSFER,1
+M020,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M020 at W005: projected usable inventory -81.01 after 8-day lead-time demand of 248.01 (safety stock 100). Shortage 181.01 units.,181.01,shortage_units,TRANSFER,1
+M022,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M022 at W005: projected usable inventory -84.80 after 8-day lead-time demand of 304.80 (safety stock 90). Shortage 174.80 units.,174.8,shortage_units,TRANSFER,1
+M004,W004,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M004 at W004: projected usable inventory -8.20 after 5-day lead-time demand of 261.20 (safety stock 150). Shortage 158.20 units.,158.2,shortage_units,REORDER,1
+M008,W001,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M008 at W001: projected usable inventory -34.05 after 5-day lead-time demand of 227.05 (safety stock 120). Shortage 154.05 units.,154.05,shortage_units,TRANSFER,1
+M030,W004,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M030 at W004: projected usable inventory -69.79 after 4-day lead-time demand of 137.79 (safety stock 80). Shortage 149.79 units.,149.79,shortage_units,REORDER,1
+M029,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M029 at W002: projected usable inventory -35.98 after 6-day lead-time demand of 222.98 (safety stock 110). Shortage 145.98 units.,145.98,shortage_units,TRANSFER,1
+M020,W006,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M020 at W006: projected usable inventory -42.49 after 4-day lead-time demand of 117.49 (safety stock 100). Shortage 142.49 units.,142.49,shortage_units,REORDER,1
+M024,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M024 at W002: projected usable inventory -50.90 after 6-day lead-time demand of 196.90 (safety stock 90). Shortage 140.90 units.,140.9,shortage_units,TRANSFER,1
+M030,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M030 at W005: projected usable inventory -73.08 after 6-day lead-time demand of 135.08 (safety stock 60). Shortage 133.08 units.,133.08,shortage_units,REORDER,1
+M007,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M007 at W005: projected usable inventory -21.17 after 7-day lead-time demand of 279.17 (safety stock 110). Shortage 131.17 units.,131.17,shortage_units,TRANSFER,1
+M020,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M020 at W003: projected usable inventory -28.53 after 5-day lead-time demand of 165.53 (safety stock 100). Shortage 128.53 units.,128.53,shortage_units,REORDER,1
+M003,W001,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M003 at W001: projected usable inventory -48.30 after 5-day lead-time demand of 155.30 (safety stock 80). Shortage 128.30 units.,128.3,shortage_units,TRANSFER,1
+M026,W006,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M026 at W006: projected usable inventory -36.53 after 3-day lead-time demand of 99.53 (safety stock 90). Shortage 126.53 units.,126.53,shortage_units,TRANSFER,1
+M005,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M005 at W002: projected usable inventory -66.47 after 5-day lead-time demand of 120.47 (safety stock 60). Shortage 126.47 units.,126.47,shortage_units,TRANSFER,1
+M018,W005,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M018 at W005: projected usable inventory -0.25 after 7-day lead-time demand of 259.25 (safety stock 120). Shortage 120.25 units.,120.25,shortage_units,TRANSFER,1
+M019,W001,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M019 at W001: projected usable inventory -36.74 after 5-day lead-time demand of 144.74 (safety stock 80). Shortage 116.74 units.,116.74,shortage_units,TRANSFER,1
+M019,W003,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M019 at W003: projected usable inventory -11.64 after 7-day lead-time demand of 198.64 (safety stock 80). Shortage 91.64 units.,91.64,shortage_units,TRANSFER,1
+M006,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M006 at W002: projected usable inventory -20.06 after 4-day lead-time demand of 143.06 (safety stock 70). Shortage 90.06 units.,90.06,shortage_units,TRANSFER,1
+M020,W002,HIGH,STOCKOUT_RISK_HIGH,HIGH stock-out risk for M020 at W002: projected usable inventory -9.90 after 4-day lead-time demand of 127.90 (safety stock 70). Shortage 79.90 units.,79.9,shortage_units,REORDER,1
+M028,W001,HIGH,EXPIRY_RISK_HIGH,HIGH expiry risk for M028 at W001: 97.63 usable units are forecast to expire before they are consumed. It cannot be moved: it expires within the 2-day transfer transit or no other warehouse can use it before expiry.,97.63,potential_expiry_excess_units,NO_ACTION,2
+M015,W002,HIGH,EXPIRY_RISK_HIGH,"HIGH expiry risk for M015 at W002: 58.49 usable units are forecast to expire before they are consumed. 58 units scheduled for transfer to W003, W005.",58.49,potential_expiry_excess_units,TRANSFER,2
+M015,W004,HIGH,EXPIRY_RISK_HIGH,"HIGH expiry risk for M015 at W004: 13.52 usable units are forecast to expire before they are consumed. 13 units scheduled for transfer to W001, W003, W005.",13.52,potential_expiry_excess_units,TRANSFER,2
+M027,W003,HIGH,EXPIRY_RISK_HIGH,HIGH expiry risk for M027 at W003: 0.41 usable units are forecast to expire before they are consumed. It cannot be moved: it expires within the 2-day transfer transit or no other warehouse can use it before expiry.,0.41,potential_expiry_excess_units,TRANSFER,2
+M002,W002,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M002 at W002: projected usable inventory 10.35 after 5-day lead-time demand of 407.65 (safety stock 180). Shortage 169.65 units. Seasonal demand signal: ELEVATED (historical seasonal demand pattern).,169.65,shortage_units,TRANSFER,3
+M011,W004,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M011 at W004: projected usable inventory 13.27 after 6-day lead-time demand of 505.73 (safety stock 130). Shortage 116.73 units. Seasonal demand signal: SEASONAL (historical seasonal demand pattern).,116.73,shortage_units,TRANSFER,3
+M014,W003,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M014 at W003: projected usable inventory 13.39 after 7-day lead-time demand of 295.61 (safety stock 130). Shortage 116.61 units.,116.61,shortage_units,TRANSFER,3
+M028,W003,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M028 at W003: projected usable inventory 46.82 after 6-day lead-time demand of 298.18 (safety stock 150). Shortage 103.18 units.,103.18,shortage_units,TRANSFER,3
+M015,W001,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M015 at W001: projected usable inventory 4.51 after 5-day lead-time demand of 169.49 (safety stock 100). Shortage 95.49 units.,95.49,shortage_units,TRANSFER,3
+M025,W003,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M025 at W003: projected usable inventory 99.34 after 6-day lead-time demand of 316.66 (safety stock 180). Shortage 80.66 units.,80.66,shortage_units,TRANSFER,3
+M023,W001,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M023 at W001: projected usable inventory 115.03 after 5-day lead-time demand of 302.97 (safety stock 190). Shortage 74.97 units.,74.97,shortage_units,TRANSFER,3
+M005,W006,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M005 at W006: projected usable inventory 47.57 after 5-day lead-time demand of 131.43 (safety stock 90). Shortage 42.43 units.,42.43,shortage_units,TRANSFER,3
+M011,W003,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M011 at W003: projected usable inventory 101.92 after 6-day lead-time demand of 445.08 (safety stock 140). Shortage 38.08 units. Seasonal demand signal: SEASONAL (historical seasonal demand pattern).,38.08,shortage_units,TRANSFER,3
+M003,W006,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M003 at W006: projected usable inventory 44.92 after 3-day lead-time demand of 85.08 (safety stock 80). Shortage 35.08 units.,35.08,shortage_units,TRANSFER,3
+M024,W005,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M024 at W005: projected usable inventory 82.02 after 6-day lead-time demand of 202.98 (safety stock 110). Shortage 27.98 units.,27.98,shortage_units,TRANSFER,3
+M021,W002,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M021 at W002: projected usable inventory 92.51 after 6-day lead-time demand of 236.49 (safety stock 120). Shortage 27.49 units.,27.49,shortage_units,TRANSFER,3
+M022,W003,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M022 at W003: projected usable inventory 73.02 after 7-day lead-time demand of 330.98 (safety stock 100). Shortage 26.98 units.,26.98,shortage_units,TRANSFER,3
+M004,W006,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M004 at W006: projected usable inventory 129.09 after 5-day lead-time demand of 254.91 (safety stock 150). Shortage 20.91 units.,20.91,shortage_units,REORDER,3
+M030,W002,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M030 at W002: projected usable inventory 50.15 after 4-day lead-time demand of 108.85 (safety stock 70). Shortage 19.85 units.,19.85,shortage_units,REORDER,3
+M020,W001,MEDIUM,STOCKOUT_RISK_MEDIUM,MEDIUM stock-out risk for M020 at W001: projected usable inventory 68.26 after 4-day lead-time demand of 129.74 (safety stock 80). Shortage 11.74 units.,11.74,shortage_units,REORDER,3
+M004,W003,LOW,E1_THRESHOLD,E1 threshold alert for M004 at W003: usable stock 74 is at or below the minimum threshold 330.,256.0,units_below_threshold,REORDER,5
+M023,W003,LOW,E1_THRESHOLD,E1 threshold alert for M023 at W003: usable stock 128 is at or below the minimum threshold 370.,242.0,units_below_threshold,TRANSFER,5
+M025,W001,LOW,E1_THRESHOLD,E1 threshold alert for M025 at W001: usable stock 117 is at or below the minimum threshold 350.,233.0,units_below_threshold,TRANSFER,5
+M027,W001,LOW,E1_THRESHOLD,E1 threshold alert for M027 at W001: usable stock 114 is at or below the minimum threshold 340.,226.0,units_below_threshold,TRANSFER,5
+M004,W005,LOW,E1_THRESHOLD,E1 threshold alert for M004 at W005: usable stock 42 is at or below the minimum threshold 240.,198.0,units_below_threshold,REORDER,5
+M025,W004,LOW,E1_THRESHOLD,E1 threshold alert for M025 at W004: usable stock 241 is at or below the minimum threshold 380.,139.0,units_below_threshold,TRANSFER,5
+M016,W002,LOW,E1_THRESHOLD,E1 threshold alert for M016 at W002: usable stock 172 is at or below the minimum threshold 300.,128.0,units_below_threshold,TRANSFER,5
+M017,W001,LOW,E1_THRESHOLD,E1 threshold alert for M017 at W001: usable stock 104 is at or below the minimum threshold 230.,126.0,units_below_threshold,TRANSFER,5
+M022,W002,LOW,E1_THRESHOLD,E1 threshold alert for M022 at W002: usable stock 129 is at or below the minimum threshold 250.,121.0,units_below_threshold,TRANSFER,5
+M016,W005,LOW,E1_THRESHOLD,E1 threshold alert for M016 at W005: usable stock 120 is at or below the minimum threshold 240.,120.0,units_below_threshold,TRANSFER,5
+M026,W006,LOW,E1_THRESHOLD,E1 threshold alert for M026 at W006: usable stock 63 is at or below the minimum threshold 180.,117.0,units_below_threshold,TRANSFER,5
+M030,W003,LOW,E1_THRESHOLD,E1 threshold alert for M030 at W003: usable stock 43 is at or below the minimum threshold 160.,117.0,units_below_threshold,REORDER,5
+M005,W002,LOW,E1_THRESHOLD,E1 threshold alert for M005 at W002: usable stock 54 is at or below the minimum threshold 170.,116.0,units_below_threshold,TRANSFER,5
+M030,W004,LOW,E1_THRESHOLD,E1 threshold alert for M030 at W004: usable stock 68 is at or below the minimum threshold 180.,112.0,units_below_threshold,REORDER,5
+M004,W004,LOW,E1_THRESHOLD,E1 threshold alert for M004 at W004: usable stock 253 is at or below the minimum threshold 360.,107.0,units_below_threshold,REORDER,5
+M020,W006,LOW,E1_THRESHOLD,E1 threshold alert for M020 at W006: usable stock 75 is at or below the minimum threshold 180.,105.0,units_below_threshold,REORDER,5
+M024,W004,LOW,E1_THRESHOLD,E1 threshold alert for M024 at W004: usable stock 136 is at or below the minimum threshold 240.,104.0,units_below_threshold,TRANSFER,5
+M014,W005,LOW,E1_THRESHOLD,E1 threshold alert for M014 at W005: usable stock 127 is at or below the minimum threshold 230.,103.0,units_below_threshold,TRANSFER,5
+M006,W002,LOW,E1_THRESHOLD,E1 threshold alert for M006 at W002: usable stock 123 is at or below the minimum threshold 220.,97.0,units_below_threshold,TRANSFER,5
+M024,W001,LOW,E1_THRESHOLD,E1 threshold alert for M024 at W001: usable stock 133 is at or below the minimum threshold 230.,97.0,units_below_threshold,TRANSFER,5
+M015,W005,LOW,E1_THRESHOLD,E1 threshold alert for M015 at W005: usable stock 36 is at or below the minimum threshold 130.,94.0,units_below_threshold,TRANSFER,5
+M006,W003,LOW,E1_THRESHOLD,E1 threshold alert for M006 at W003: usable stock 88 is at or below the minimum threshold 180.,92.0,units_below_threshold,TRANSFER,5
+M015,W003,LOW,E1_THRESHOLD,E1 threshold alert for M015 at W003: usable stock 77 is at or below the minimum threshold 160.,83.0,units_below_threshold,TRANSFER,5
+M020,W003,LOW,E1_THRESHOLD,E1 threshold alert for M020 at W003: usable stock 137 is at or below the minimum threshold 220.,83.0,units_below_threshold,REORDER,5
+M001,W002,LOW,E1_THRESHOLD,E1 threshold alert for M001 at W002: usable stock 120 is at or below the minimum threshold 200.,80.0,units_below_threshold,TRANSFER,5
+M027,W003,LOW,E1_THRESHOLD,E1 threshold alert for M027 at W003: usable stock 220 is at or below the minimum threshold 300.,80.0,units_below_threshold,TRANSFER,5
+M030,W005,LOW,E1_THRESHOLD,E1 threshold alert for M030 at W005: usable stock 62 is at or below the minimum threshold 140.,78.0,units_below_threshold,REORDER,5
+M008,W001,LOW,E1_THRESHOLD,E1 threshold alert for M008 at W001: usable stock 193 is at or below the minimum threshold 270.,77.0,units_below_threshold,TRANSFER,5
+M003,W001,LOW,E1_THRESHOLD,E1 threshold alert for M003 at W001: usable stock 107 is at or below the minimum threshold 180.,73.0,units_below_threshold,TRANSFER,5
+M019,W001,LOW,E1_THRESHOLD,E1 threshold alert for M019 at W001: usable stock 108 is at or below the minimum threshold 180.,72.0,units_below_threshold,TRANSFER,5
+M014,W002,LOW,E1_THRESHOLD,E1 threshold alert for M014 at W002: usable stock 141 is at or below the minimum threshold 210.,69.0,units_below_threshold,TRANSFER,5
+M009,W002,LOW,E1_THRESHOLD,E1 threshold alert for M009 at W002: usable stock 162 is at or below the minimum threshold 230.,68.0,units_below_threshold,TRANSFER,5
+M015,W001,LOW,E1_THRESHOLD,E1 threshold alert for M015 at W001: usable stock 174 is at or below the minimum threshold 230.,56.0,units_below_threshold,TRANSFER,5
+M024,W002,LOW,E1_THRESHOLD,E1 threshold alert for M024 at W002: usable stock 146 is at or below the minimum threshold 200.,54.0,units_below_threshold,TRANSFER,5
+M020,W002,LOW,E1_THRESHOLD,E1 threshold alert for M020 at W002: usable stock 118 is at or below the minimum threshold 170.,52.0,units_below_threshold,REORDER,5
+M003,W006,LOW,E1_THRESHOLD,E1 threshold alert for M003 at W006: usable stock 130 is at or below the minimum threshold 170.,40.0,units_below_threshold,TRANSFER,5
+M029,W002,LOW,E1_THRESHOLD,E1 threshold alert for M029 at W002: usable stock 187 is at or below the minimum threshold 220.,33.0,units_below_threshold,TRANSFER,5
+M030,W002,LOW,E1_THRESHOLD,E1 threshold alert for M030 at W002: usable stock 159 is at or below the minimum threshold 190.,31.0,units_below_threshold,REORDER,5
+M020,W005,LOW,E1_THRESHOLD,E1 threshold alert for M020 at W005: usable stock 167 is at or below the minimum threshold 180.,13.0,units_below_threshold,TRANSFER,5
+M019,W003,LOW,E1_THRESHOLD,E1 threshold alert for M019 at W003: usable stock 187 is at or below the minimum threshold 190.,3.0,units_below_threshold,TRANSFER,5
+M023,W003,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M023 at W003: receive 459 units from W004, W005.",459.0,transfer_units,TRANSFER,6
+M004,W003,INFO,REORDER_RECOMMENDED,Reorder 366 units for M004 at W003: remaining shortage 365.53 after transfers.,366.0,reorder_units,REORDER,6
+M027,W001,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M027 at W001: receive 361 units from W002, W004.",361.0,transfer_units,TRANSFER,6
+M001,W002,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M001 at W002: receive 328 units from W001, W004.",328.0,transfer_units,TRANSFER,6
+M016,W005,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M016 at W005: receive 310 units from W003, W004.",310.0,transfer_units,TRANSFER,6
+M027,W003,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M027 at W003: receive 292 units from W004.,292.0,transfer_units,TRANSFER,6
+M025,W001,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M025 at W001: receive 288 units from W005.,288.0,transfer_units,TRANSFER,6
+M004,W005,INFO,REORDER_RECOMMENDED,Reorder 245 units for M004 at W005: remaining shortage 244.37 after transfers.,245.0,reorder_units,REORDER,6
+M006,W003,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M006 at W003: receive 243 units from W004, W005.",243.0,transfer_units,TRANSFER,6
+M015,W005,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M015 at W005: receive 237 units from W002, W004.",237.0,transfer_units,TRANSFER,6
+M009,W005,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M009 at W005: receive 228 units from W001, W004.",228.0,transfer_units,TRANSFER,6
+M012,W004,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M012 at W004: receive 227 units from W003.,227.0,transfer_units,TRANSFER,6
+M024,W004,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M024 at W004: receive 216 units from W003, W006.",216.0,transfer_units,TRANSFER,6
+M024,W001,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M024 at W001: receive 209 units from W006.,209.0,transfer_units,TRANSFER,6
+M016,W002,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M016 at W002: receive 208 units from W001, W003, W004, W006.",208.0,transfer_units,TRANSFER,6
+M009,W002,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M009 at W002: receive 202 units from W004.,202.0,transfer_units,TRANSFER,6
+M014,W002,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M014 at W002: receive 198 units from W001.,198.0,transfer_units,TRANSFER,6
+M022,W002,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M022 at W002: receive 197 units from W004, W006.",197.0,transfer_units,TRANSFER,6
+M002,W003,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M002 at W003: receive 196 units from W005.,196.0,transfer_units,TRANSFER,6
+M025,W004,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M025 at W004: receive 195 units from W005.,195.0,transfer_units,TRANSFER,6
+M017,W001,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M017 at W001: receive 189 units from W005, W006.",189.0,transfer_units,TRANSFER,6
+M015,W003,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M015 at W003: receive 185 units from W002, W004.",185.0,transfer_units,TRANSFER,6
+M014,W005,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M014 at W005: receive 183 units from W001.,183.0,transfer_units,TRANSFER,6
+M020,W005,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M020 at W005: receive 182 units from W004.,182.0,transfer_units,TRANSFER,6
+M022,W005,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M022 at W005: receive 175 units from W004.,175.0,transfer_units,TRANSFER,6
+M002,W002,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M002 at W002: receive 170 units from W005.,170.0,transfer_units,TRANSFER,6
+M004,W004,INFO,REORDER_RECOMMENDED,Reorder 159 units for M004 at W004: remaining shortage 158.20 after transfers.,159.0,reorder_units,REORDER,6
+M008,W001,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M008 at W001: receive 155 units from W005.,155.0,transfer_units,TRANSFER,6
+M004,W005,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M004 at W005: receive 151 units from W001, W002.",151.0,transfer_units,REORDER,6
+M030,W004,INFO,REORDER_RECOMMENDED,Reorder 150 units for M030 at W004: remaining shortage 149.79 after transfers.,150.0,reorder_units,REORDER,6
+M030,W003,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M030 at W003: receive 148 units from W001, W006.",148.0,transfer_units,REORDER,6
+M029,W002,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M029 at W002: receive 146 units from W004, W006.",146.0,transfer_units,TRANSFER,6
+M024,W002,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M024 at W002: receive 141 units from W006.,141.0,transfer_units,TRANSFER,6
+M020,W006,INFO,REORDER_RECOMMENDED,Reorder 140 units for M020 at W006: remaining shortage 139.49 after transfers.,140.0,reorder_units,REORDER,6
+M030,W005,INFO,REORDER_RECOMMENDED,Reorder 134 units for M030 at W005: remaining shortage 133.08 after transfers.,134.0,reorder_units,REORDER,6
+M007,W005,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M007 at W005: receive 132 units from W002.,132.0,transfer_units,TRANSFER,6
+M003,W001,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M003 at W001: receive 129 units from W003, W004.",129.0,transfer_units,TRANSFER,6
+M020,W003,INFO,REORDER_RECOMMENDED,Reorder 129 units for M020 at W003: remaining shortage 128.53 after transfers.,129.0,reorder_units,REORDER,6
+M005,W002,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M005 at W002: receive 127 units from W003.,127.0,transfer_units,TRANSFER,6
+M026,W006,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M026 at W006: receive 127 units from W002.,127.0,transfer_units,TRANSFER,6
+M018,W005,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M018 at W005: receive 121 units from W002.,121.0,transfer_units,TRANSFER,6
+M011,W004,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M011 at W004: receive 117 units from W006.,117.0,transfer_units,TRANSFER,6
+M014,W003,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M014 at W003: receive 117 units from W001.,117.0,transfer_units,TRANSFER,6
+M019,W001,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M019 at W001: receive 117 units from W006.,117.0,transfer_units,TRANSFER,6
+M028,W003,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M028 at W003: receive 104 units from W005.,104.0,transfer_units,TRANSFER,6
+M030,W003,INFO,REORDER_RECOMMENDED,Reorder 99 units for M030 at W003: remaining shortage 98.16 after transfers.,99.0,reorder_units,REORDER,6
+M015,W001,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M015 at W001: receive 96 units from W004.,96.0,transfer_units,TRANSFER,6
+M019,W003,INFO,TRANSFER_RECOMMENDED,"Transfer recommended for M019 at W003: receive 92 units from W002, W006.",92.0,transfer_units,TRANSFER,6
+M006,W002,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M006 at W002: receive 91 units from W005.,91.0,transfer_units,TRANSFER,6
+M025,W003,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M025 at W003: receive 81 units from W005.,81.0,transfer_units,TRANSFER,6
+M020,W002,INFO,REORDER_RECOMMENDED,Reorder 80 units for M020 at W002: remaining shortage 79.90 after transfers.,80.0,reorder_units,REORDER,6
+M023,W001,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M023 at W001: receive 75 units from W004.,75.0,transfer_units,TRANSFER,6
+M015,W002,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M015 at W002: send 58 expiry-risk units.,58.0,transfer_units,TRANSFER,6
+M005,W006,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M005 at W006: receive 43 units from W003.,43.0,transfer_units,TRANSFER,6
+M011,W003,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M011 at W003: receive 39 units from W006.,39.0,transfer_units,TRANSFER,6
+M003,W006,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M003 at W006: receive 36 units from W003.,36.0,transfer_units,TRANSFER,6
+M021,W002,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M021 at W002: receive 28 units from W004.,28.0,transfer_units,TRANSFER,6
+M024,W005,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M024 at W005: receive 28 units from W006.,28.0,transfer_units,TRANSFER,6
+M022,W003,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M022 at W003: receive 27 units from W004.,27.0,transfer_units,TRANSFER,6
+M004,W006,INFO,REORDER_RECOMMENDED,Reorder 21 units for M004 at W006: remaining shortage 20.91 after transfers.,21.0,reorder_units,REORDER,6
+M030,W002,INFO,REORDER_RECOMMENDED,Reorder 20 units for M030 at W002: remaining shortage 19.85 after transfers.,20.0,reorder_units,REORDER,6
+M015,W004,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M015 at W004: send 13 expiry-risk units.,13.0,transfer_units,TRANSFER,6
+M020,W001,INFO,REORDER_RECOMMENDED,Reorder 12 units for M020 at W001: remaining shortage 11.74 after transfers.,12.0,reorder_units,REORDER,6
+M020,W006,INFO,TRANSFER_RECOMMENDED,Transfer recommended for M020 at W006: receive 3 units from W004.,3.0,transfer_units,REORDER,6
