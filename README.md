@@ -1,12 +1,26 @@
-# MedCare Pharma: Inventory Alerts + Demand Sensing (E1 + P1)
+# MedCare Pharma: Smart Restock & Demand Sensing
 
-Decision support for supply-chain planners. It combines current inventory
-(E1) with a 30-day demand forecast (P1) to recommend TRANSFER, REORDER or
-NO_ACTION before a stock-out happens.
+AI-driven inventory decision support for a pharmacy network. It forecasts 30-day demand with Amazon's **Chronos-2** model and recommends **TRANSFER**, **REORDER** or **NO_ACTION** for every medicine in every warehouse before a stock-out happens.
 
-**Status:** Phases 1–9 are done, plus the E1 + P1 extensions (sales/receipt/adjustment ledger, seasonal demand signal, notifications): structure, SQLite, Chronos-2 integration,
-the inventory calculator, the risk engine and the expiry engine. Allocation,
-replenishment and alerts (Phases 8–13) come next.
+**[Open the live dashboard](https://gauravlevon-creator.github.io/MedCare-Pharma/medcare_dashboard.html)**
+
+![MedCare Pharma executive dashboard](docs/screenshot.png)
+
+## Highlights
+
+- **180 SKU-warehouse items** (30 medicines × 6 warehouses), each with a 30-day demand forecast using promotion and season signals
+- **Expiry-aware stock:** usable stock excludes expired batches and is consumed first-expiry-first-out (FEFO)
+- **Explainable decisions:** lead-time demand + safety stock, stock-out and expiry risk scoring, and a decision trace for every item
+- **Transfers before reorders:** moves surplus stock between warehouses before raising supplier purchase orders
+- **7-page interactive dashboard** with KPIs and charts, plus real-time **email alerts** for high-risk stock-outs and expiries
+
+**Tech stack:** Python · Chronos-2 · Pandas · SQLite · Streamlit · Plotly · HTML/JavaScript · SMTP · pytest · GitHub Actions (Pages deploy)
+
+**Team project.** My part (Gaurav Kumar): the dashboard frontend (`frontend/`, `html_frontend/`, `streamlit_app.py`) and the email alert system. See [Ownership](#ownership) for the full split.
+
+---
+
+**Status:** Phases 1–9 are done, plus the E1 + P1 extensions (sales/receipt/adjustment ledger, seasonal demand signal, notifications).
 
 ## Inventory calculations and risk (Phases 5–6)
 
@@ -46,7 +60,7 @@ which comes in a later phase.
 | Forecasting | Nishit | `ml/` |
 | Business decisions | Team lead | `decision_engine/` (Phase 5+) |
 | Integration | Ruthie | `database/database.py`, `integration/`, `main.py` |
-| Dashboard | Gaurav | Streamlit (later) |
+| Dashboard and alerts | Gaurav | `frontend/`, `html_frontend/`, `streamlit_app.py` |
 
 ## Data timelines
 
